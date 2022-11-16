@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { QueriesItems } from './interface/queries.interface';
 import {
   fileNamesEnum,
-  GetReturnFileType,
   loadAnyFile,
   QueriesItemsFileType,
   saveAnyJsonInFile,

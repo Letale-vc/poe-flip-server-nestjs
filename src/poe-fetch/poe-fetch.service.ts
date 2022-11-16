@@ -1,25 +1,25 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable, Logger } from '@nestjs/common';
-import { lastValueFrom, map } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 import {
-  PoeTradeDataItemsResponse,
-  PoeSecondResult,
-  ResponseLeagueList,
   PoeFirstResponse,
   PoeSecondResponse,
+  PoeSecondResult,
+  PoeTradeDataItemsResponse,
+  ResponseLeagueList,
 } from '../types/responsePoeFetch';
 
 @Injectable()
 export class PoeFetchService {
-  constructor(private readonly _httpService: HttpService) {}
-
   leagueName: string;
-
-  headers = {
+  private _headers = {
     'Content-Type': 'application/json',
     accept: '*/*',
     'User-Agent': 'NestJS',
   };
+
+  constructor(private readonly _httpService: HttpService) {}
+
   async onModuleInit(): Promise<void> {
     try {
       this.leagueName = await this._takeLeagueName();
@@ -27,13 +27,14 @@ export class PoeFetchService {
       Logger.error(err);
     }
   }
+
   async _takeLeagueName(): Promise<string> {
     try {
       const observableResponse =
         await this._httpService.get<ResponseLeagueList>(
           'https://www.pathofexile.com/api/trade/data/leagues',
           {
-            headers: this.headers,
+            headers: this._headers,
           },
         );
       return (await lastValueFrom(observableResponse)).data.result[0].text;
@@ -49,7 +50,7 @@ export class PoeFetchService {
         await this._httpService.get<PoeTradeDataItemsResponse>(
           'https://www.pathofexile.com/api/trade/data/items',
           {
-            headers: this.headers,
+            headers: this._headers,
           },
         );
 
@@ -69,7 +70,7 @@ export class PoeFetchService {
           body: query,
         },
         {
-          headers: this.headers,
+          headers: this._headers,
         },
       );
       return (await lastValueFrom(response)).data;
@@ -90,7 +91,7 @@ export class PoeFetchService {
           ',',
         )}?query=${queryId}`,
         {
-          headers: this.headers,
+          headers: this._headers,
         },
       );
       return (await lastValueFrom(response)).data;

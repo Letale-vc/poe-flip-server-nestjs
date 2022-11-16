@@ -1,26 +1,25 @@
 import { Injectable, Logger } from '@nestjs/common';
 import {
+  DataItemsType,
+  fileNamesEnum,
   loadAnyFile,
   saveAnyJsonInFile,
-  fileNamesEnum,
-  DataItemsType,
 } from '../tools/workingWithFile';
 import { PoeFetchService } from '../poe-fetch/poe-fetch.service';
 import { delay, round } from '../tools/utils';
 import { ItemInfoType, RowType } from './cardPoeTypes';
 import {
-  PoeTradeDataItemsResponse,
   PoeSecondResult,
+  PoeTradeDataItemsResponse,
 } from '../types/responsePoeFetch';
 
 @Injectable()
 export class CardPoeDataService {
-  constructor(private readonly _poeFetchService: PoeFetchService) {}
-
   _poeTradeDataItemsLocalFile: PoeTradeDataItemsResponse;
-
   _divineChaosEquivalent = 0;
   _exaltedChaosEquivalent = 0;
+
+  constructor(private readonly _poeFetchService: PoeFetchService) {}
 
   async onModuleInit() {
     const items = await this._poeFetchService.poeTradeDataItems();
@@ -54,14 +53,14 @@ export class CardPoeDataService {
             if (checkIfFindItem) {
               const newData = {
                 ...acc,
-                card: newArray,
+                cards: [...newArray],
               };
               await saveAnyJsonInFile(fileNamesEnum.POE_DATA, newData);
               return newData;
             }
             const newData = {
               ...acc,
-              card: [...newArray, row],
+              cards: [...newArray, row],
             };
             await saveAnyJsonInFile(fileNamesEnum.POE_DATA, newData);
             return newData;
@@ -183,9 +182,9 @@ export class CardPoeDataService {
     divinePrice: number;
     chaosPrice: number;
   } {
-    const differenceChaos = 15;
-    const differenceDivine = 1;
-    const differenceExalted = 2;
+    // const differenceChaos = 15;
+    // const differenceDivine = 1;
+    // const differenceExalted = 2;
     const resultValue = itemsArray.reduce(
       (
         previousValue,
@@ -195,7 +194,7 @@ export class CardPoeDataService {
         lastPrice: number;
         count: number;
       } => {
-        const l = previousValue.lastPrice;
+        // const l = previousValue.lastPrice;
         const a = previousValue.accValue;
         const b = currentValue.listing.price.amount;
         // TODO: need uncomment  if need
