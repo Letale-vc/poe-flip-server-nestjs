@@ -8,7 +8,9 @@ export const namesFile = {
   currencyQuery: 'currencyQuery.json',
 };
 
-export const loadAnyFile = async (nameFile: string): Promise<any | false> => {
+export const loadAnyFile = async (
+  nameFile: string,
+): Promise<unknown | false> => {
   const pathFile = path.resolve(nameFile);
   const contents = await fs.readFile(pathFile);
   return JSON.parse(contents.toString());
@@ -16,7 +18,7 @@ export const loadAnyFile = async (nameFile: string): Promise<any | false> => {
 
 export const saveAnyJsonInFile = async (
   nameFile: string,
-  data: Array<{ [key: string]: any }> | { [key: string]: any },
+  data: Array<{ [key: string]: unknown }> | { [key: string]: unknown },
 ) => {
   const pathPoeDataFile = path.resolve(nameFile);
   const stringifyPoeData = JSON.stringify(data, null, 4);
