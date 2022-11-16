@@ -3,7 +3,7 @@ import { CardPoeDataService } from './card-poe-data.service';
 import * as filesWork from '../tools/workingWithFile';
 import { PoeFetchService } from '../poe-fetch/poe-fetch.service';
 import { PoeSecondResult } from '../types/responsePoeFetch';
-import { poeSecondResponse } from '../mocks/poeSecondResponse';
+import { poeSecondResponse } from '../../mocks/poeSecondResponse';
 import { fileNamesEnum, saveAnyJsonInFile } from '../tools/workingWithFile';
 
 jest.mock('../tools/workingWithFile', () => {
