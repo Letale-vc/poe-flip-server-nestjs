@@ -3,12 +3,14 @@ import * as fs from 'fs/promises';
 import { RowType } from '../card-poe-data/cardPoeTypes';
 import { PoeTradeDataItemsResponse } from '../types/responsePoeFetch';
 import { QueriesItems } from '../queries/interface/queries.interface';
+
 export enum fileNamesEnum {
   POE_QUERIES_SEARCH = 'poeSearchUrls.json',
   POE_DATA = 'poeData.json',
   POE_TRADE_DATA_ITEMS = 'poeTradeDataItems.json',
   CURRENCY_QUERIES = 'currencyQuery.json',
 }
+
 export type CurrencyQueriesType = { divine: string; exalted: string };
 export type QueriesItemsFileType = QueriesItems[];
 export type DataItemsType = {

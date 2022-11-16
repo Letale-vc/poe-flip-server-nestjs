@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { QueriesItems } from './interface/queries.interface';
 import {
   fileNamesEnum,
-  GetReturnFileType,
   loadAnyFile,
   QueriesItemsFileType,
   saveAnyJsonInFile,
@@ -18,6 +16,7 @@ export class QueriesService {
       await saveAnyJsonInFile(fileNamesEnum.POE_QUERIES_SEARCH, []);
     }
   }
+
   async getQueries(): Promise<QueriesItemsFileType> {
     return loadAnyFile(fileNamesEnum.POE_QUERIES_SEARCH);
   }
