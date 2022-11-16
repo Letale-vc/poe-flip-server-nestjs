@@ -4,7 +4,7 @@ import * as filesWork from '../tools/workingWithFile';
 import { PoeFetchService } from '../poe-fetch/poe-fetch.service';
 import { PoeSecondResult } from '../types/responsePoeFetch';
 import { poeSecondResponse } from '../mocks/poeSecondResponse';
-import { namesFile, saveAnyJsonInFile } from '../tools/workingWithFile';
+import { fileNamesEnum, saveAnyJsonInFile } from '../tools/workingWithFile';
 
 jest.mock('../tools/workingWithFile', () => {
   const originalModule = jest.requireActual('../tools/workingWithFile');
@@ -272,7 +272,7 @@ describe('CardPoeDataService', () => {
     it('should be called function _takeCurrencyEquivalent', async () => {
       jest.spyOn(service, '_takeCurrencyEquivalent').mockResolvedValue();
       jest.spyOn(filesWork, 'loadAnyFile').mockImplementation((arg) => {
-        if (arg === namesFile.poeData) {
+        if (arg === fileNamesEnum.POE_DATA) {
           return Promise.resolve({ card: [], gems: [] });
         }
         return Promise.resolve([]);
@@ -302,14 +302,14 @@ describe('CardPoeDataService', () => {
       };
       jest.spyOn(service, '_takeRow').mockResolvedValue(mockRowObject);
       jest.spyOn(filesWork, 'loadAnyFile').mockImplementation((arg) => {
-        if (arg === namesFile.poeData) {
+        if (arg === fileNamesEnum.POE_DATA) {
           return Promise.resolve({ card: [], gems: [] });
         }
         return Promise.resolve([{ cardQuery: 'test', itemQuery: 'test' }]);
       });
       await service.update();
       expect(saveAnyJsonInFile).toHaveBeenCalledTimes(1);
-      expect(saveAnyJsonInFile).toHaveBeenCalledWith(namesFile.poeData, {
+      expect(saveAnyJsonInFile).toHaveBeenCalledWith(fileNamesEnum.POE_DATA, {
         card: [mockRowObject],
         gems: [],
       });
@@ -340,7 +340,7 @@ describe('CardPoeDataService', () => {
 
       jest.spyOn(service, '_takeRow').mockResolvedValue(mockRowObject2);
       jest.spyOn(filesWork, 'loadAnyFile').mockImplementation((arg) => {
-        if (arg === namesFile.poeData) {
+        if (arg === fileNamesEnum.POE_DATA) {
           return Promise.resolve({
             card: [mockRowObject, mockRowObject2],
             gems: [],
@@ -350,7 +350,7 @@ describe('CardPoeDataService', () => {
       });
       await service.update();
       expect(saveAnyJsonInFile).toHaveBeenCalledTimes(1);
-      expect(saveAnyJsonInFile).toHaveBeenCalledWith(namesFile.poeData, {
+      expect(saveAnyJsonInFile).toHaveBeenCalledWith(fileNamesEnum.POE_DATA, {
         card: [mockRowObject, mockRowObject2],
         gems: [],
       });

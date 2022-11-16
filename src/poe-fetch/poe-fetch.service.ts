@@ -8,7 +8,6 @@ import {
   PoeFirstResponse,
   PoeSecondResponse,
 } from '../types/responsePoeFetch';
-import { namesFile, saveAnyJsonInFile } from '../tools/workingWithFile';
 
 @Injectable()
 export class PoeFetchService {

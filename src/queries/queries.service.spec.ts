@@ -1,9 +1,9 @@
 import { Test } from '@nestjs/testing';
 import { QueriesService } from './queries.service';
 import {
+  fileNamesEnum,
   loadAnyFile,
   saveAnyJsonInFile,
-  namesFile,
 } from '../tools/workingWithFile';
 
 jest.mock('../tools/workingWithFile', () => {
@@ -41,10 +41,10 @@ describe('QueriesService', () => {
     expect(queriesService).toBeDefined();
   });
   describe('getQueries', () => {
-    it('should be return test and toBeCallWith namesFile.poeQueries', async () => {
+    it('should be return test and toBeCallWith fileNamesEnum.POE_QUERIES_SEARCH', async () => {
       // check what the mock function returns loadAnyFile
       expect(await queriesService.getQueries()).toStrictEqual([]);
-      expect(loadAnyFile).toBeCalledWith(namesFile.poeQueries);
+      expect(loadAnyFile).toBeCalledWith(fileNamesEnum.POE_QUERIES_SEARCH);
     });
   });
 
@@ -53,14 +53,20 @@ describe('QueriesService', () => {
       await queriesService.editQueries([]);
 
       expect(saveAnyJsonInFile).toBeCalledTimes(1);
-      expect(saveAnyJsonInFile).toBeCalledWith(namesFile.poeQueries, []);
+      expect(saveAnyJsonInFile).toBeCalledWith(
+        fileNamesEnum.POE_QUERIES_SEARCH,
+        [],
+      );
     });
   });
   describe('onModuleInit', () => {
     it('should be call mock function saveAnyJsonInFile', async () => {
       await queriesService.onModuleInit();
       expect(saveAnyJsonInFile).toBeCalledTimes(1);
-      expect(saveAnyJsonInFile).toBeCalledWith(namesFile.poeQueries, []);
+      expect(saveAnyJsonInFile).toBeCalledWith(
+        fileNamesEnum.POE_QUERIES_SEARCH,
+        [],
+      );
     });
   });
 });

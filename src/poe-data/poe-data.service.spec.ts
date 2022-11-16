@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing';
 import { PoeDataService } from './poe-data.service';
-import { saveAnyJsonInFile, namesFile } from '../tools/workingWithFile';
+import { fileNamesEnum, saveAnyJsonInFile } from '../tools/workingWithFile';
 
 jest.mock('../tools/workingWithFile', () => {
   const originalModule = jest.requireActual('../tools/workingWithFile');
@@ -41,7 +41,7 @@ describe('PoeDataService', () => {
     it('should be call mock function saveAnyJsonInFile', async () => {
       await poeDataService.onModuleInit();
       expect(saveAnyJsonInFile).toBeCalledTimes(1);
-      expect(saveAnyJsonInFile).toBeCalledWith(namesFile.poeData, {
+      expect(saveAnyJsonInFile).toBeCalledWith(fileNamesEnum.POE_DATA, {
         cards: [],
         gems: [],
       });

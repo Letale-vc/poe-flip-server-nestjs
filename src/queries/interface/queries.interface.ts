@@ -1,4 +1,4 @@
-export interface QueriesItemsFile {
+export interface QueriesItems {
   cardQuery: string;
   itemQuery: string;
 }

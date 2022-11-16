@@ -1,8 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import {
-  namesFile,
   loadAnyFile,
   saveAnyJsonInFile,
+  fileNamesEnum,
+  QueriesItemsFileType,
+  DataItemsType,
 } from '../tools/workingWithFile';
 import { PoeFetchService } from '../poe-fetch/poe-fetch.service';
 import { delay, round } from '../tools/utils';
@@ -26,50 +28,53 @@ export class CardPoeDataService {
   async onModuleInit() {
     const items = await this._poeFetchService.poeTradeDataItems();
     this._poeTradeDataItemsLocalFile = items;
-    await saveAnyJsonInFile(namesFile.poeTradeDataItems, items);
+    await saveAnyJsonInFile(fileNamesEnum.POE_TRADE_DATA_ITEMS, items);
   }
 
   async update(): Promise<void> {
     try {
       await this._takeCurrencyEquivalent();
-      const searchQueries = await loadAnyFile(namesFile.poeQueries); //?
+      const searchQueries = await loadAnyFile(fileNamesEnum.POE_QUERIES_SEARCH);
 
-      const oldRowPoeData = await loadAnyFile(namesFile.poeData); //?
+      const oldRowsPoeData = await loadAnyFile(fileNamesEnum.POE_DATA);
 
-      await searchQueries.reduce(async (accPromise, current) => {
-        const acc = await accPromise;
-        await delay();
-        try {
-          const row = await this._takeRow({
-            ...current,
-          });
-          let checkIfFindItem = false;
-          const newArray = acc.card.map((el) => {
-            if (row.cardInfo.name === el.cardInfo.name) {
-              checkIfFindItem = true;
-              return row;
+      await searchQueries.reduce(
+        async (accPromise: Promise<DataItemsType>, current) => {
+          const acc = await accPromise;
+          await delay();
+          try {
+            const row = await this._takeRow({
+              ...current,
+            });
+            let checkIfFindItem = false;
+            const newArray = acc.cards.map((el) => {
+              if (row.cardInfo.name === el.cardInfo.name) {
+                checkIfFindItem = true;
+                return row;
+              }
+              return el;
+            });
+            if (checkIfFindItem) {
+              const newData = {
+                ...acc,
+                card: newArray,
+              };
+              await saveAnyJsonInFile(fileNamesEnum.POE_DATA, newData);
+              return newData;
             }
-            return el;
-          });
-          if (checkIfFindItem) {
             const newData = {
               ...acc,
-              card: newArray,
+              card: [...newArray, row],
             };
-            await saveAnyJsonInFile(namesFile.poeData, newData);
+            await saveAnyJsonInFile(fileNamesEnum.POE_DATA, newData);
             return newData;
+          } catch (err) {
+            Logger.error(err);
+            return acc;
           }
-          const newData = {
-            ...acc,
-            card: [...newArray, row],
-          };
-          await saveAnyJsonInFile(namesFile.poeData, newData);
-          return newData;
-        } catch (err) {
-          Logger.error(err);
-          return acc;
-        }
-      }, Promise.resolve({ ...oldRowPoeData }));
+        },
+        Promise.resolve({ ...oldRowsPoeData }),
+      );
     } catch (err) {
       if (err instanceof Error) throw new Error(err.message);
       throw new Error('UnknownException');
@@ -77,8 +82,7 @@ export class CardPoeDataService {
   }
 
   async _takeCurrencyEquivalent(): Promise<void> {
-    const currencyQuery: { divine: string; exalted: string } =
-      await loadAnyFile(namesFile.currencyQuery);
+    const currencyQuery = await loadAnyFile(fileNamesEnum.CURRENCY_QUERIES);
     const divine = await this._poeFetchService.makeARequestToAnyItem(
       currencyQuery.divine,
     );

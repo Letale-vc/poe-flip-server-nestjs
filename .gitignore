@@ -10,6 +10,7 @@ pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
+package-lock.json
 
 # OS
 .DS_Store
@@ -34,8 +35,9 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 
-poeData.json
-poeSearchUrls.json
-ninjaData.json
-yarn.lock
-package-lock.json
+data/poeData.json
+data/poeSearchUrls.json
+data/yarn.lock
+data/poeTradeDataItems.json
+
+
