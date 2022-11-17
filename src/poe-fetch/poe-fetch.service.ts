@@ -15,6 +15,11 @@ export class PoeFetchService {
 
   leagueName: string;
 
+  headers = {
+    'Content-Type': 'application/json',
+    accept: '*/*',
+    'User-Agent': 'NestJS',
+  };
   async onModuleInit(): Promise<void> {
     try {
       this.leagueName = await this._takeLeagueName();
@@ -28,11 +33,7 @@ export class PoeFetchService {
         await this._httpService.get<ResponseLeagueList>(
           'https://www.pathofexile.com/api/trade/data/leagues',
           {
-            headers: {
-              'Content-Type': 'application/json',
-              accept: '*/*',
-              'User-Agent': 'NestJS',
-            },
+            headers: this.headers,
           },
         );
       return (await lastValueFrom(observableResponse)).data.result[0].text;
@@ -48,11 +49,7 @@ export class PoeFetchService {
         await this._httpService.get<PoeTradeDataItemsResponse>(
           'https://www.pathofexile.com/api/trade/data/items',
           {
-            headers: {
-              'Content-Type': 'application/json',
-              accept: '*/*',
-              'User-Agent': 'NestJS',
-            },
+            headers: this.headers,
           },
         );
 
@@ -72,11 +69,7 @@ export class PoeFetchService {
           body: query,
         },
         {
-          headers: {
-            'Content-Type': 'application/json',
-            accept: '*/*',
-            'User-Agent': 'NestJS',
-          },
+          headers: this.headers,
         },
       );
       return (await lastValueFrom(response)).data;
@@ -97,11 +90,7 @@ export class PoeFetchService {
           ',',
         )}?query=${queryId}`,
         {
-          headers: {
-            'Content-Type': 'application/json',
-            accept: '*/*',
-            'User-Agent': 'NestJS',
-          },
+          headers: this.headers,
         },
       );
       return (await lastValueFrom(response)).data;
