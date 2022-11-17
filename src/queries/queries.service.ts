@@ -16,6 +16,7 @@ export class QueriesService {
       await saveAnyJsonInFile(fileNamesEnum.POE_QUERIES_SEARCH, []);
     }
   }
+
   async getQueries(): Promise<QueriesItemsFileType> {
     return loadAnyFile(fileNamesEnum.POE_QUERIES_SEARCH);
   }
