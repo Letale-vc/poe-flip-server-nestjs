@@ -85,7 +85,7 @@ describe('CardPoeDataService', () => {
     it('must find name in _poeTradeDataItemsLocalFile and return this name', () => {
       const name = 'testName';
       const typeBase = 'testTypeBase';
-      service.poeTradeDataItemsLocalFile = {
+      service._poeTradeDataItemsLocalFile = {
         result: [
           {
             id: 'test',
@@ -106,11 +106,11 @@ describe('CardPoeDataService', () => {
     it('should take an empty name, and return typeBase', () => {
       const name = '';
       const typeBase = 'testTypeBase';
-      service.poeTradeDataItemsLocalFile = {
+      service._poeTradeDataItemsLocalFile = {
         result: [
           {
             id: 'test',
-            label: 'test lavel',
+            label: 'test label',
             entries: [
               {
                 name: name,
@@ -127,11 +127,11 @@ describe('CardPoeDataService', () => {
     it('should take not empty name, not find in _poeTradeDataItemsLocalFile name and return typeBase', () => {
       const name = 'testName';
       const typeBase = 'testTypeBase';
-      service.poeTradeDataItemsLocalFile = {
+      service._poeTradeDataItemsLocalFile = {
         result: [
           {
             id: 'test',
-            label: 'test lavel',
+            label: 'test label',
             entries: [
               {
                 name: name,

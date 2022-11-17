@@ -722,6 +722,14 @@
   dependencies:
     axios "0.27.2"
 
+"@nestjs/class-validator@^0.13.4":
+  version "0.13.4"
+  resolved "https://registry.yarnpkg.com/@nestjs/class-validator/-/class-validator-0.13.4.tgz#6dc574681cecad2eadd749489999739992fb781f"
+  integrity sha512-/mqZL36LJ5uV5WDhi87Cd52IssuO+SStaOr2+6sBsvCCGUWkoJes4Wwzmm3m/gdHH+tsNxX60sVSzYcU6hAy9Q==
+  dependencies:
+    libphonenumber-js "^1.9.43"
+    validator "^13.7.0"
+
 "@nestjs/cli@^9.1.4":
   version "9.1.4"
   resolved "https://registry.yarnpkg.com/@nestjs/cli/-/cli-9.1.4.tgz#a5a88d02d90a5eff279aa00af3c84ff74882e63c"
@@ -1785,14 +1793,6 @@ class-transformer@^0.5.1:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/class-transformer/-/class-transformer-0.5.1.tgz#24147d5dffd2a6cea930a3250a677addf96ab336"
   integrity sha512-SQa1Ws6hUbfC98vKGxZH3KFY0Y1lm5Zm0SY8XX9zbK7FJCyVEac3ATW0RIpwzW+oOfmHE5PMPufDG9hCfoEOMw==
-
-class-validator@^0.13.2:
-  version "0.13.2"
-  resolved "https://registry.yarnpkg.com/class-validator/-/class-validator-0.13.2.tgz#64b031e9f3f81a1e1dcd04a5d604734608b24143"
-  integrity sha512-yBUcQy07FPlGzUjoLuUfIOXzgynnQPPruyK1Ge2B74k9ROwnle1E+NxLWnUv5OLU8hA/qL5leAE9XnXq3byaBw==
-  dependencies:
-    libphonenumber-js "^1.9.43"
-    validator "^13.7.0"
 
 cli-cursor@^3.1.0:
   version "3.1.0"

@@ -3,7 +3,6 @@ import * as fs from 'fs/promises';
 import { RowType } from '../card-poe-data/cardPoeTypes';
 import { PoeTradeDataItemsResponse } from '../types/responsePoeFetch';
 import { QueriesItems } from '../queries/interface/queries.interface';
-import { Logger } from '@nestjs/common';
 export enum fileNamesEnum {
   POE_QUERIES_SEARCH = 'poeSearchUrls.json',
   POE_DATA = 'poeData.json',
@@ -48,7 +47,7 @@ export const saveAnyJsonInFile: SaveAnyJsonInFileType = async (
   nameFile,
   data,
 ) => {
-  const pathPoeDataFile = path.resolve('data', nameFile); //?
+  const pathPoeDataFile = path.resolve('data', nameFile);
   const stringifyPoeData = JSON.stringify(data, null, 4);
   return fs.writeFile(pathPoeDataFile, stringifyPoeData);
 };

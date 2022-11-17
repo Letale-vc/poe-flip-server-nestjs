@@ -3,7 +3,6 @@ import {
   loadAnyFile,
   saveAnyJsonInFile,
   fileNamesEnum,
-  QueriesItemsFileType,
   DataItemsType,
 } from '../tools/workingWithFile';
 import { PoeFetchService } from '../poe-fetch/poe-fetch.service';
@@ -18,10 +17,8 @@ import {
 export class CardPoeDataService {
   constructor(private readonly _poeFetchService: PoeFetchService) {}
 
-  private _poeTradeDataItemsLocalFile: PoeTradeDataItemsResponse;
-  public set poeTradeDataItemsLocalFile(value: PoeTradeDataItemsResponse) {
-    this._poeTradeDataItemsLocalFile = value;
-  }
+  _poeTradeDataItemsLocalFile: PoeTradeDataItemsResponse;
+
   _divineChaosEquivalent = 0;
   _exaltedChaosEquivalent = 0;
 
