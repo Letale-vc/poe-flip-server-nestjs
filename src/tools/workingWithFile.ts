@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as fs from 'fs/promises';
-import { RowType } from '../card-poe-data/cardPoeTypes';
+import { CardTypes } from '../card-poe-data/interface/card-types';
 import { PoeTradeDataItemsResponse } from '../types/response-poe-fetch';
 import { QueriesItems } from '../poe-queries/interface/queries.interface';
 
@@ -14,7 +14,7 @@ export enum fileNamesEnum {
 export type CurrencyQueriesType = { divine: string; exalted: string };
 export type QueriesItemsFileType = QueriesItems[];
 export type DataItemsType = {
-  cards: Array<RowType>;
+  cards: Array<CardTypes>;
   gems: Array<Object>;
 };
 export type loadAnyFileType = <S extends fileNamesEnum>(

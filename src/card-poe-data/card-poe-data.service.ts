@@ -7,7 +7,7 @@ import {
 } from '../tools/workingWithFile';
 import { PoeFetchService } from '../poe-fetch/poe-fetch.service';
 import { delay, round } from '../tools/utils';
-import { ItemInfoType, RowType } from './cardPoeTypes';
+import { CardTypes, ItemInfoType } from './interface/card-types';
 import {
   PoeSecondResult,
   PoeTradeDataItemsResponse,
@@ -101,7 +101,7 @@ export class CardPoeDataService {
   }: {
     cardQuery: string;
     itemQuery: string;
-  }): Promise<RowType> {
+  }): Promise<CardTypes> {
     try {
       const cardInfo = await this._takeItemInfo(cardQuery);
       const itemInfo = await this._takeItemInfo(itemQuery);
