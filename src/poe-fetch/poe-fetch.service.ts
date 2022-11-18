@@ -7,7 +7,7 @@ import {
   PoeSecondResult,
   PoeTradeDataItemsResponse,
   ResponseLeagueList,
-} from '../types/responsePoeFetch';
+} from '../types/response-poe-fetch';
 
 @Injectable()
 export class PoeFetchService {

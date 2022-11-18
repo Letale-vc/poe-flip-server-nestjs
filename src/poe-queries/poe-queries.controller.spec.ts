@@ -1,20 +1,18 @@
-import { HttpStatus } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { QueriesController } from './queries.controller';
-import { QueriesService } from './queries.service';
-import * as httpMock from 'node-mocks-http';
+import { PoeQueriesController } from './poe-queries-controller';
+import { PoeQueriesService } from './poe-queries.service';
 
 describe('QueriesController', () => {
-  let queriesController: QueriesController;
-  let queriesService: QueriesService;
+  let queriesController: PoeQueriesController;
+  let queriesService: PoeQueriesService;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [], // Add
-      controllers: [QueriesController], // Add
+      controllers: [PoeQueriesController], // Add
       providers: [
         {
-          provide: QueriesService,
+          provide: PoeQueriesService,
           useValue: {
             getQueries: jest.fn().mockResolvedValueOnce([]),
             editQueries: jest.fn(),
@@ -23,8 +21,9 @@ describe('QueriesController', () => {
       ], // Add
     }).compile();
 
-    queriesController = moduleRef.get<QueriesController>(QueriesController);
-    queriesService = moduleRef.get<QueriesService>(QueriesService);
+    queriesController =
+      moduleRef.get<PoeQueriesController>(PoeQueriesController);
+    queriesService = moduleRef.get<PoeQueriesService>(PoeQueriesService);
   });
 
   it('should be defined', () => {

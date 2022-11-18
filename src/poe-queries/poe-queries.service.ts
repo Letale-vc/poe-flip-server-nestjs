@@ -9,7 +9,7 @@ import { QueriesUpdateDto } from './dto/queries-update.dto';
 import * as fs from 'fs';
 
 @Injectable()
-export class QueriesService {
+export class PoeQueriesService {
   async onModuleInit() {
     const isHaveFile = fs.existsSync(fileNamesEnum.POE_QUERIES_SEARCH);
     if (!isHaveFile) {
