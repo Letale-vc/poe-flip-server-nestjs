@@ -1,5 +1,5 @@
 import { Test } from '@nestjs/testing';
-import { QueriesService } from './queries.service';
+import { PoeQueriesService } from './poe-queries.service';
 import {
   fileNamesEnum,
   loadAnyFile,
@@ -24,17 +24,17 @@ jest.mock('fs', () => {
   };
 });
 describe('QueriesService', () => {
-  let queriesService: QueriesService;
+  let queriesService: PoeQueriesService;
 
   beforeEach(async () => {
     jest.clearAllMocks();
     const moduleRef = await Test.createTestingModule({
       imports: [], // Add
       controllers: [], // Add
-      providers: [QueriesService], // Add
+      providers: [PoeQueriesService], // Add
     }).compile();
 
-    queriesService = moduleRef.get<QueriesService>(QueriesService);
+    queriesService = moduleRef.get<PoeQueriesService>(PoeQueriesService);
   });
 
   it('should be defined', () => {

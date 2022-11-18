@@ -1,11 +1,11 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { QueriesUpdateDto } from './dto/queries-update.dto';
 import { QueriesItems } from './interface/queries.interface';
-import { QueriesService } from './queries.service';
+import { PoeQueriesService } from './poe-queries.service';
 
 @Controller('poeQueries')
-export class QueriesController {
-  constructor(private _queriesService: QueriesService) {}
+export class PoeQueriesController {
+  constructor(private _queriesService: PoeQueriesService) {}
 
   @Get()
   async getAll(): Promise<QueriesItems[]> {

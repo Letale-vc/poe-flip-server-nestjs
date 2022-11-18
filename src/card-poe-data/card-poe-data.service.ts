@@ -11,7 +11,7 @@ import { ItemInfoType, RowType } from './cardPoeTypes';
 import {
   PoeSecondResult,
   PoeTradeDataItemsResponse,
-} from '../types/responsePoeFetch';
+} from '../types/response-poe-fetch';
 
 @Injectable()
 export class CardPoeDataService {

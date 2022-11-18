@@ -1,8 +1,8 @@
 import * as path from 'path';
 import * as fs from 'fs/promises';
 import { RowType } from '../card-poe-data/cardPoeTypes';
-import { PoeTradeDataItemsResponse } from '../types/responsePoeFetch';
-import { QueriesItems } from '../queries/interface/queries.interface';
+import { PoeTradeDataItemsResponse } from '../types/response-poe-fetch';
+import { QueriesItems } from '../poe-queries/interface/queries.interface';
 
 export enum fileNamesEnum {
   POE_QUERIES_SEARCH = 'poeSearchUrls.json',
