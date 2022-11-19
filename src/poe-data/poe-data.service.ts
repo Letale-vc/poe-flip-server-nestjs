@@ -37,9 +37,8 @@ export class PoeDataService {
     if (Date.now() - lastUpdate.getTime() < 30000) return Promise.resolve();
     while (this._forceStop === 1) {
       try {
-        console.log('test');
         await this._cardPoeDataService.update();
-        Logger.log('passed the cycle');
+        Logger.log('Passed the cycle');
       } catch (e) {
         this._forceStop = 0;
       }

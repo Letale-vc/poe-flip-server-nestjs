@@ -58,3 +58,9 @@ export const fileInfo = async (nameFile: fileNamesEnum) => {
   const pathFile = path.resolve('data', nameFile);
   return fsPromises.stat(pathFile);
 };
+
+export default {
+  saveAnyJsonInFile,
+  fileInfo,
+  loadAnyFile,
+};
