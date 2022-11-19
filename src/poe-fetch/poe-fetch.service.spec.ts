@@ -3,8 +3,6 @@ import { PoeFetchService } from './poe-fetch.service';
 import { HttpModule } from '@nestjs/axios';
 import poeHandlers, { poeFirstResponse, queryId } from '../../mocks/handlers';
 import { setupServer } from 'msw/node';
-import { saveAnyJsonInFile } from '../tools/workingWithFile';
-import * as path from 'path';
 import * as fs from 'fs/promises';
 import { poeSecondResponse } from '../../mocks/poeSecondResponse';
 import { mockPoeTradeDataItems } from '../../mocks/mock-poe-trade-data-items';

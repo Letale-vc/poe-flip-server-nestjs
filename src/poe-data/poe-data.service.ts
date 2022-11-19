@@ -1,5 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { fileNamesEnum, saveAnyJsonInFile } from '../tools/workingWithFile';
+import {
+  fileInfo,
+  fileNamesEnum,
+  loadAnyFile,
+  saveAnyJsonInFile,
+} from '../tools/workingWithFile';
 import * as fs from 'fs';
 import * as path from 'path';
 import { CardPoeDataService } from '../card-poe-data/card-poe-data.service';
@@ -28,6 +33,9 @@ export class PoeDataService {
   };
 
   async startUpdate() {
+    const fileDataInfo = await fileInfo(fileNamesEnum.POE_DATA);
+    const lastUpdate = fileDataInfo.mtime;
+    if (Date.now() - lastUpdate.getTime() < 30000) return;
     while (this._forceStop === 1) {
       try {
         await this._cardPoeDataService.update();
@@ -36,5 +44,14 @@ export class PoeDataService {
         this.forceStopChanged(0);
       }
     }
+  }
+
+  async takePoeData() {
+    const poeData = await loadAnyFile(fileNamesEnum.POE_DATA);
+    const fileDataInfo = await fileInfo(fileNamesEnum.POE_DATA);
+    const lastUpdate = fileDataInfo.mtime;
+    const canUpdate = Date.now() - lastUpdate.getTime() > 30000;
+
+    return { poeData, lastUpdate, canUpdate };
   }
 }
