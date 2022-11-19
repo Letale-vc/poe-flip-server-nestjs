@@ -13,10 +13,13 @@ import { CardPoeDataService } from '../card-poe-data/card-poe-data.service';
 export class PoeDataService {
   constructor(private readonly _cardPoeDataService: CardPoeDataService) {}
 
-  private _forceStop: 0 | 1 = 1;
-
+  _forceStop: 0 | 1 = 1;
   get forceStop(): 0 | 1 {
     return this._forceStop;
+  }
+
+  set forceStop(n: 0 | 1) {
+    this._forceStop = n;
   }
 
   async onModuleInit() {
@@ -28,20 +31,17 @@ export class PoeDataService {
     }
   }
 
-  forceStopChanged = (n: 0 | 1) => {
-    this._forceStop = n;
-  };
-
   async startUpdate() {
     const fileDataInfo = await fileInfo(fileNamesEnum.POE_DATA);
     const lastUpdate = fileDataInfo.mtime;
-    if (Date.now() - lastUpdate.getTime() < 30000) return;
+    if (Date.now() - lastUpdate.getTime() < 30000) return Promise.resolve();
     while (this._forceStop === 1) {
       try {
+        console.log('test');
         await this._cardPoeDataService.update();
         Logger.log('passed the cycle');
       } catch (e) {
-        this.forceStopChanged(0);
+        this._forceStop = 0;
       }
     }
   }

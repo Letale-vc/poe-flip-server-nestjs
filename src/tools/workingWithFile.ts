@@ -56,5 +56,5 @@ export const saveAnyJsonInFile: SaveAnyJsonInFileType = async (
 
 export const fileInfo = async (nameFile: fileNamesEnum) => {
   const pathFile = path.resolve('data', nameFile);
-  return fsPromises.lstat(pathFile);
+  return fsPromises.stat(pathFile);
 };
