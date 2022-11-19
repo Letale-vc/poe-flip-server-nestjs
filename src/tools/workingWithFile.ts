@@ -1,6 +1,6 @@
 import * as path from 'path';
-import * as fs from 'fs/promises';
-import { RowType } from '../card-poe-data/cardPoeTypes';
+import * as fsPromises from 'fs/promises';
+import { CardTypes } from '../card-poe-data/interface/card-types';
 import { PoeTradeDataItemsResponse } from '../types/response-poe-fetch';
 import { QueriesItems } from '../poe-queries/interface/queries.interface';
 
@@ -14,7 +14,7 @@ export enum fileNamesEnum {
 export type CurrencyQueriesType = { divine: string; exalted: string };
 export type QueriesItemsFileType = QueriesItems[];
 export type DataItemsType = {
-  cards: Array<RowType>;
+  cards: Array<CardTypes>;
   gems: Array<Object>;
 };
 export type loadAnyFileType = <S extends fileNamesEnum>(
@@ -33,7 +33,7 @@ export type GetReturnFileType<T> = T extends fileNamesEnum.CURRENCY_QUERIES
 
 export const loadAnyFile: loadAnyFileType = async (nameFile) => {
   const pathFile = path.resolve('data', nameFile);
-  const contents = await fs.readFile(pathFile);
+  const contents = await fsPromises.readFile(pathFile);
   return JSON.parse(contents.toString());
 };
 
@@ -49,7 +49,18 @@ export const saveAnyJsonInFile: SaveAnyJsonInFileType = async (
   nameFile,
   data,
 ) => {
-  const pathPoeDataFile = path.resolve('data', nameFile);
+  const pathFile = path.resolve('data', nameFile);
   const stringifyPoeData = JSON.stringify(data, null, 4);
-  return fs.writeFile(pathPoeDataFile, stringifyPoeData);
+  return fsPromises.writeFile(pathFile, stringifyPoeData);
+};
+
+export const fileInfo = async (nameFile: fileNamesEnum) => {
+  const pathFile = path.resolve('data', nameFile);
+  return fsPromises.stat(pathFile);
+};
+
+export default {
+  saveAnyJsonInFile,
+  fileInfo,
+  loadAnyFile,
 };

@@ -1,4 +1,4 @@
-export interface RowType {
+export interface CardTypes {
   cardInfo: {
     priceInChaosIfFullStackSize: number;
     priceInDivineIfFullStackSize: number;
