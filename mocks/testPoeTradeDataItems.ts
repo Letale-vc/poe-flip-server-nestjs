@@ -1,4 +1,4 @@
-export const mockPoeTradeDataItems = {
+export const testPoeTradeDataItems = {
   result: [
     {
       id: 'accessories',

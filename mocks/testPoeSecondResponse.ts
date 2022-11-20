@@ -1,4 +1,4 @@
-export const poeSecondResponse = {
+export const testPoeSecondResponse = {
   card: {
     result: [
       {

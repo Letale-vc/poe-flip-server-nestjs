@@ -1,12 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
 import {
+  fileExist,
   fileInfo,
   fileNamesEnum,
   loadAnyFile,
   saveAnyJsonInFile,
 } from '../tools/workingWithFile';
-import * as fs from 'fs';
-import * as path from 'path';
 import { CardPoeDataService } from '../card-poe-data/card-poe-data.service';
 
 @Injectable()
@@ -23,9 +22,7 @@ export class PoeDataService {
   }
 
   async onModuleInit() {
-    const isHaveFile = fs.existsSync(
-      path.resolve('data', fileNamesEnum.POE_DATA),
-    );
+    const isHaveFile = fileExist(fileNamesEnum.POE_DATA);
     if (!isHaveFile) {
       await saveAnyJsonInFile(fileNamesEnum.POE_DATA, { cards: [], gems: [] });
     }
