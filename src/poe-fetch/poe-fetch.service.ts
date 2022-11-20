@@ -1,6 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable, Logger } from '@nestjs/common';
-import { lastValueFrom } from 'rxjs';
+import { catchError, firstValueFrom, lastValueFrom } from 'rxjs';
 import {
   PoeFirstResponse,
   PoeSecondResponse,
@@ -12,11 +12,7 @@ import {
 @Injectable()
 export class PoeFetchService {
   leagueName: string;
-  private _headers = {
-    'Content-Type': 'application/json',
-    accept: '*/*',
-    'User-Agent': 'NestJS',
-  };
+  private readonly logger = new Logger(PoeFetchService.name);
 
   constructor(private readonly _httpService: HttpService) {}
 
@@ -24,7 +20,7 @@ export class PoeFetchService {
     try {
       this.leagueName = await this._takeLeagueName();
     } catch (err) {
-      Logger.error(err);
+      this.logger.error(err);
     }
   }
 
@@ -33,25 +29,31 @@ export class PoeFetchService {
       const observableResponse =
         await this._httpService.get<ResponseLeagueList>(
           'https://www.pathofexile.com/api/trade/data/leagues',
-          {
-            headers: this._headers,
-          },
+          this.httpOptions(),
         );
-      return (await lastValueFrom(observableResponse)).data.result[0].text;
+      return (await lastValueFrom(observableResponse)).data.result.find(
+        (el) =>
+          !el.id.toLowerCase().includes('standard') &&
+          !el.id.toLowerCase().includes('hardcore'),
+      ).text;
     } catch (err) {
-      if (err instanceof Error) throw new Error(err.message);
-      throw new Error('UnknownException');
+      if (err instanceof Error) throw err.message;
+      throw 'UnknownException';
     }
   }
 
   async poeTradeDataItems(): Promise<PoeTradeDataItemsResponse> {
     try {
-      const observableResponse =
-        await this._httpService.get<PoeTradeDataItemsResponse>(
+      const observableResponse = await this._httpService
+        .get<PoeTradeDataItemsResponse>(
           'https://www.pathofexile.com/api/trade/data/items',
-          {
-            headers: this._headers,
-          },
+          this.httpOptions(),
+        )
+        .pipe(
+          catchError((e) => {
+            this.logger.error(e.response.data);
+            throw e.message;
+          }),
         );
 
       return (await lastValueFrom(observableResponse)).data;
@@ -64,20 +66,25 @@ export class PoeFetchService {
 
   async poeFirsRequest(query: string): Promise<PoeFirstResponse> {
     try {
-      const response = await this._httpService.post<PoeFirstResponse>(
-        `https://www.pathofexile.com/api/trade/search/${this.leagueName}`,
-        {
-          body: query,
-        },
-        {
-          headers: this._headers,
-        },
+      const { data } = await firstValueFrom(
+        this._httpService
+          .post<PoeFirstResponse>(
+            `https://www.pathofexile.com/api/trade/search/${this.leagueName}`,
+            JSON.parse(query),
+            this.httpOptions(),
+          )
+          .pipe(
+            catchError((e) => {
+              this.logger.error(e.response.data);
+              throw e.message;
+            }),
+          ),
       );
-      return (await lastValueFrom(response)).data;
+      return data;
     } catch (err) {
       Logger.error(err);
-      if (err instanceof Error) throw new Error(err.message);
-      throw new Error('UnknownException');
+      if (err instanceof Error) throw err.message;
+      throw 'UnknownException';
     }
   }
 
@@ -86,19 +93,24 @@ export class PoeFetchService {
     queryId: string,
   ): Promise<PoeSecondResponse> {
     try {
-      const response = await this._httpService.get<PoeSecondResponse>(
-        `https://www.pathofexile.com/api/trade/fetch/${resultIdsArrayString.join(
-          ',',
-        )}?query=${queryId}`,
-        {
-          headers: this._headers,
-        },
-      );
+      const response = await this._httpService
+        .get<PoeSecondResponse>(
+          `https://www.pathofexile.com/api/trade/fetch/${resultIdsArrayString.join(
+            ',',
+          )}?query=${queryId}`,
+          this.httpOptions(),
+        )
+        .pipe(
+          catchError((e) => {
+            this.logger.error(e.response.data);
+            throw e.message;
+          }),
+        );
+
       return (await lastValueFrom(response)).data;
     } catch (err) {
-      Logger.error(err);
-      if (err instanceof Error) throw new Error(err.message);
-      throw new Error('UnknownException');
+      if (err instanceof Error) throw err.message;
+      throw 'UnknownException';
     }
   }
 
@@ -107,9 +119,11 @@ export class PoeFetchService {
     id: string;
   }> {
     try {
-      const firstResponse = await this.poeFirsRequest(query);
-
+      const firstResponse = await this.poeFirsRequest(query); //?
       const { id, result, total } = firstResponse;
+      if (total === 0) {
+        return Promise.reject(new Error('No items found'));
+      }
       const howToSkipFirstItems = total > 60 ? 3 : 0;
       const howMuchToTakeFromTheResult = total <= 9 ? total : 9;
 
@@ -123,9 +137,18 @@ export class PoeFetchService {
       );
       return { result: [...secondResponse.result], id };
     } catch (err) {
-      Logger.error(err);
-      if (err instanceof Error) throw new Error(err.message);
-      throw new Error('UnknownException');
+      if (err instanceof Error) throw err.message;
+      throw 'UnknownException';
     }
   }
+
+  private readonly httpOptions = () => {
+    const headers = {
+      'Content-Type': 'application/json',
+      'User-Agent': 'NestJS',
+      access: '*/*',
+    };
+
+    return { headers };
+  };
 }

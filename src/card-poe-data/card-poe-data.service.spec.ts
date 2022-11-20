@@ -4,7 +4,7 @@ import * as filesWork from '../tools/workingWithFile';
 import { fileNamesEnum, saveAnyJsonInFile } from '../tools/workingWithFile';
 import { PoeFetchService } from '../poe-fetch/poe-fetch.service';
 import { PoeSecondResult } from '../types/response-poe-fetch';
-import { poeSecondResponse } from '../../mocks/poeSecondResponse';
+import { testPoeSecondResponse } from '../../mocks/testPoeSecondResponse';
 
 jest.mock('../tools/workingWithFile', () => {
   const originalModule = jest.requireActual('../tools/workingWithFile');
@@ -35,6 +35,7 @@ describe('CardPoeDataService', () => {
         {
           provide: PoeFetchService,
           useValue: {
+            leagueName: 'testLeagueName',
             onModuleInit: jest.fn(),
             _takeLeagueName: jest.fn(),
             poeTradeDataItems: jest.fn(),
@@ -214,7 +215,7 @@ describe('CardPoeDataService', () => {
   describe('_takeItemInfo', () => {
     it('should return an object with keys like in expectKeysInObject', async () => {
       jest.spyOn(poeFetchService, 'makeARequestToAnyItem').mockResolvedValue({
-        result: poeSecondResponse.card
+        result: testPoeSecondResponse.card
           .result as unknown as Array<PoeSecondResult>,
         id: 'test',
       });

@@ -29,11 +29,13 @@ export class CardPoeDataService {
 
   async update(): Promise<void> {
     try {
-      await this._takeCurrencyEquivalent();
       const searchQueries = await loadAnyFile(fileNamesEnum.POE_QUERIES_SEARCH);
+      if (searchQueries.length === 0)
+        return Promise.reject(new Error('Not have queries'));
 
       const oldRowsPoeData = await loadAnyFile(fileNamesEnum.POE_DATA);
 
+      await this._takeCurrencyEquivalent();
       await searchQueries.reduce(
         async (accPromise: Promise<DataItemsType>, current) => {
           const acc = await accPromise;
@@ -161,15 +163,18 @@ export class CardPoeDataService {
         result[0].item.maxStackSize * priceValues.chaosPrice;
       const priceInDivineIfFullStackSize =
         result[0].item.maxStackSize * priceValues.divinePrice;
-      const poeTradeLink = `https://www.pathofexile.com/api/trade/search/${this._poeFetchService.leagueName}/${id}`;
 
+      const poeTradeLinkURL = new URL(
+        'https://www.pathofexile.com/trade/search',
+      );
+      poeTradeLinkURL.pathname = `${poeTradeLinkURL.pathname}/${this._poeFetchService.leagueName}/${id}`;
       return {
         name,
         stackSize,
         ...priceValues,
         priceInChaosIfFullStackSize,
         priceInDivineIfFullStackSize,
-        poeTradeLink,
+        poeTradeLink: poeTradeLinkURL.toString(),
       };
     } catch (err) {
       if (err instanceof Error) throw new Error(err.message);

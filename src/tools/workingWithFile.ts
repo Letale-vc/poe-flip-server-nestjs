@@ -3,6 +3,7 @@ import * as fsPromises from 'fs/promises';
 import { CardTypes } from '../card-poe-data/interface/card-types';
 import { PoeTradeDataItemsResponse } from '../types/response-poe-fetch';
 import { QueriesItems } from '../poe-queries/interface/queries.interface';
+import * as fs from 'fs';
 
 export enum fileNamesEnum {
   POE_QUERIES_SEARCH = 'poeSearchUrls.json',
@@ -11,12 +12,18 @@ export enum fileNamesEnum {
   CURRENCY_QUERIES = 'currencyQuery.json',
 }
 
+const pathFolder = path.resolve('data');
+const createPathFolderFile = (nameFile: fileNamesEnum) =>
+  path.join(pathFolder, nameFile);
+
 export type CurrencyQueriesType = { divine: string; exalted: string };
-export type QueriesItemsFileType = QueriesItems[];
-export type DataItemsType = {
+export type QueriesItemsFileType = Array<QueriesItems>;
+
+export interface DataItemsType {
   cards: Array<CardTypes>;
   gems: Array<Object>;
-};
+}
+
 export type loadAnyFileType = <S extends fileNamesEnum>(
   nameFile: S,
 ) => Promise<GetReturnFileType<S>>;
@@ -32,7 +39,7 @@ export type GetReturnFileType<T> = T extends fileNamesEnum.CURRENCY_QUERIES
   : unknown;
 
 export const loadAnyFile: loadAnyFileType = async (nameFile) => {
-  const pathFile = path.resolve('data', nameFile);
+  const pathFile = createPathFolderFile(nameFile);
   const contents = await fsPromises.readFile(pathFile);
   return JSON.parse(contents.toString());
 };
@@ -49,18 +56,23 @@ export const saveAnyJsonInFile: SaveAnyJsonInFileType = async (
   nameFile,
   data,
 ) => {
-  const pathFile = path.resolve('data', nameFile);
+  const pathFile = createPathFolderFile(nameFile);
   const stringifyPoeData = JSON.stringify(data, null, 4);
   return fsPromises.writeFile(pathFile, stringifyPoeData);
 };
 
 export const fileInfo = async (nameFile: fileNamesEnum) => {
-  const pathFile = path.resolve('data', nameFile);
+  const pathFile = createPathFolderFile(nameFile);
   return fsPromises.stat(pathFile);
+};
+export const fileExist = (nameFile: fileNamesEnum) => {
+  const pathFile = createPathFolderFile(nameFile);
+  return fs.existsSync(pathFile);
 };
 
 export default {
   saveAnyJsonInFile,
   fileInfo,
   loadAnyFile,
+  fileExist,
 };

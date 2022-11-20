@@ -1,8 +1,6 @@
 import { rest } from 'msw';
-import * as path from 'path';
-import * as fs from 'fs/promises';
-import { poeSecondResponse } from './poeSecondResponse';
-import { mockPoeTradeDataItems } from './mock-poe-trade-data-items';
+import { testPoeSecondResponse } from './testPoeSecondResponse';
+import { testPoeTradeDataItems } from './testPoeTradeDataItems';
 
 export const queryId = {
   card: 'QbP9X5etw',
@@ -130,7 +128,7 @@ export const poeHandlers = [
   rest.get(
     'https://www.pathofexile.com/api/trade/data/items',
     async (_req, res, ctx) => {
-      return res(ctx.json(mockPoeTradeDataItems));
+      return res(ctx.json(testPoeTradeDataItems));
     },
   ),
   rest.post(
@@ -147,8 +145,8 @@ export const poeHandlers = [
     async (req, res, ctx) => {
       const reqQuery = req.url.searchParams.get('query');
       if (reqQuery === queryId.card) {
-        return res(ctx.json(poeSecondResponse.card));
-      } else return res(ctx.json(poeSecondResponse.item));
+        return res(ctx.json(testPoeSecondResponse.card));
+      } else return res(ctx.json(testPoeSecondResponse.item));
     },
   ),
 ];

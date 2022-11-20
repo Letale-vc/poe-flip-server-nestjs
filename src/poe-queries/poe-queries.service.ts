@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import {
+  fileExist,
   fileNamesEnum,
   loadAnyFile,
   QueriesItemsFileType,
   saveAnyJsonInFile,
 } from '../tools/workingWithFile';
 import { QueriesUpdateDto } from './dto/queries-update.dto';
-import * as fs from 'fs';
 
 @Injectable()
 export class PoeQueriesService {
   async onModuleInit() {
-    const isHaveFile = fs.existsSync(fileNamesEnum.POE_QUERIES_SEARCH);
+    const isHaveFile = fileExist(fileNamesEnum.POE_QUERIES_SEARCH);
     if (!isHaveFile) {
       await saveAnyJsonInFile(fileNamesEnum.POE_QUERIES_SEARCH, []);
     }
