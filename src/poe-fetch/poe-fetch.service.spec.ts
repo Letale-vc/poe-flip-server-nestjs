@@ -4,8 +4,8 @@ import { HttpModule } from '@nestjs/axios';
 import poeHandlers, { poeFirstResponse, queryId } from '../../mocks/handlers';
 import { setupServer } from 'msw/node';
 import * as fs from 'fs/promises';
-import { poeSecondResponse } from '../../mocks/poeSecondResponse';
-import { mockPoeTradeDataItems } from '../../mocks/mock-poe-trade-data-items';
+import { testPoeSecondResponse } from '../../mocks/testPoeSecondResponse';
+import { testPoeTradeDataItems } from '../../mocks/testPoeTradeDataItems';
 
 jest.mock('../tools/workingWithFile', () => {
   const originalModule = jest.requireActual('../tools/workingWithFile');
@@ -62,7 +62,7 @@ describe('PoeFetchService', () => {
   describe('poeTradeDataItems', () => {
     it('should be return testArray', async () => {
       const data = await poeFetchService.poeTradeDataItems();
-      expect(data).toEqual(mockPoeTradeDataItems);
+      expect(data).toEqual(testPoeTradeDataItems);
     });
   });
   describe('onModuleInit', () => {
@@ -86,14 +86,14 @@ describe('PoeFetchService', () => {
           poeFirstResponse.card.result,
           poeFirstResponse.card.id,
         ),
-      ).toEqual(poeSecondResponse.card);
+      ).toEqual(testPoeSecondResponse.card);
     });
   });
 
   describe('makeARequestToAnyItem', () => {
     it('should be return testObject', async () => {
       const testObject = {
-        result: poeSecondResponse.card.result,
+        result: testPoeSecondResponse.card.result,
         id: poeFirstResponse.card.id,
       };
       const testFetchResult = await poeFetchService.makeARequestToAnyItem(

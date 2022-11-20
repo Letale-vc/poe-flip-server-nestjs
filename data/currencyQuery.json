@@ -1,4 +1,4 @@
-{   
-    "divine": "{'query':{'status':{'option':'online'},'type':'Divine Orb','stats':[{'type':'and','filters':[],'disabled':false}],'filters':{'trade_filters':{'filters':{'price':{'option':'chaos'},'indexed':{'option':'1day'},'collapse':{'option':'true'}},'disabled':false}}},'sort':{'price':'asc'}}",
-    "exalted": "{'query':{'status':{'option':'online'},'type':'Exalted Orb','stats':[{'type':'and','filters':[],'disabled':false}],'filters':{'trade_filters':{'filters':{'price':{'option':'chaos'},'indexed':{'option':'1day'},'collapse':{'option':'true'}},'disabled':false}}},'sort':{'price':'asc'}}"
+{
+  "divine": "{\"query\":{\"status\":{\"option\":\"online\"},\"type\":\"Divine Orb\",\"stats\":[{\"type\":\"and\",\"filters\":[]}],\"filters\":{\"trade_filters\":{\"filters\":{\"price\":{\"option\":\"chaos\"}}}}},\"sort\":{\"price\":\"asc\"}}",
+  "exalted": "{\"query\":{\"status\":{\"option\":\"online\"},\"type\":\"Exalted Orb\",\"stats\":[{\"type\":\"and\",\"filters\":[]}],\"filters\":{\"trade_filters\":{\"filters\":{\"price\":{\"option\":\"chaos\"}}}}},\"sort\":{\"price\":\"asc\"}}"
 }
