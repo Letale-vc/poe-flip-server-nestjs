@@ -35,7 +35,6 @@ export class CardPoeDataService {
 
       const oldRowsPoeData = await loadAnyFile(fileNamesEnum.POE_DATA);
 
-
       await delay();
       await this._takeCurrencyEquivalent();
       await searchQueries.reduce(
@@ -169,11 +168,7 @@ export class CardPoeDataService {
         result[0].item.maxStackSize * priceValues.divinePrice;
 
       const poeTradeLinkURL = new URL(
-<<<<<<< HEAD
         'https://www.pathofexile.com/trade/search',
-=======
-        'https://www.pathofexile.com/api/trade/search',
->>>>>>> 615197d595878e9ed3a4d26be0ab2d598a630140
       );
       poeTradeLinkURL.pathname = `${poeTradeLinkURL.pathname}/${this._poeFetchService.leagueName}/${id}`;
       return {
