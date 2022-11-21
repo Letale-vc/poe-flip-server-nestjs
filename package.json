@@ -3,11 +3,7 @@
   "description": "",
   "author": "",
   "private": false,
-<<<<<<< HEAD
   "license": "UNLICENSED",
-=======
-  "license": "MIT License",
->>>>>>> 615197d595878e9ed3a4d26be0ab2d598a630140
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
