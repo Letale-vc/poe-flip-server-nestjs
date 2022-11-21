@@ -5,33 +5,28 @@ import {
   loadAnyFile,
   saveAnyJsonInFile,
 } from '../tools/workingWithFile';
+import * as fs from 'fs';
 
 jest.mock('../tools/workingWithFile', () => {
   const originalModule = jest.requireActual('../tools/workingWithFile');
   return {
     __esModule: true,
     ...originalModule,
-    loadAnyFile: jest.fn().mockResolvedValueOnce([]),
+    loadAnyFile: jest.fn(),
     saveAnyJsonInFile: jest.fn(),
   };
 });
-jest.mock('fs', () => {
-  const originalModule = jest.requireActual('fs');
-  return {
-    __esModule: true,
-    ...originalModule,
-    existsSync: jest.fn().mockReturnValueOnce(false),
-  };
-});
+jest.mock('fs');
 describe('QueriesService', () => {
   let queriesService: PoeQueriesService;
 
   beforeEach(async () => {
     jest.clearAllMocks();
+    (loadAnyFile as jest.Mock).mockResolvedValue([]);
     const moduleRef = await Test.createTestingModule({
       imports: [], // Add
       controllers: [], // Add
-      providers: [PoeQueriesService], // Add
+      providers: [PoeQueriesService],
     }).compile();
 
     queriesService = moduleRef.get<PoeQueriesService>(PoeQueriesService);
@@ -50,8 +45,51 @@ describe('QueriesService', () => {
 
   describe('editQueries', () => {
     it('should be call mock function saveAnyJsonInFile', async () => {
-      await queriesService.editQueries([]);
+      const uuid = 'testUuid';
+      const testUploadedFileQueries = [
+        {
+          cardQuery: 'test',
+          itemQuery: 'test',
+          uuid: uuid,
+        },
+        {
+          cardQuery: 'test',
+          itemQuery: 'test',
+          uuid: '321321321',
+        },
+      ];
+      const newTestFlipQuery = {
+        cardQuery: 'test2',
+        itemQuery: 'test2',
+        uuid: uuid,
+      };
+      queriesService.uploadedFileQueries = testUploadedFileQueries;
+      await queriesService.editQueries(newTestFlipQuery);
 
+      expect(queriesService.uploadedFileQueries).toEqual(
+        queriesService.uploadedFileQueries.map((el) => {
+          if (el.uuid === uuid) return newTestFlipQuery;
+          return el;
+        }),
+      );
+      expect(saveAnyJsonInFile).toBeCalledTimes(1);
+      expect(saveAnyJsonInFile).toBeCalledWith(
+        fileNamesEnum.POE_QUERIES_SEARCH,
+        queriesService.uploadedFileQueries,
+      );
+    });
+  });
+  describe('removeQueries', () => {
+    it('should be call mock function saveAnyJsonInFile with clear array', async () => {
+      const uuid = 'testUuid';
+      const testFlipQuery = {
+        cardQuery: 'test',
+        itemQuery: 'test',
+        uuid: uuid,
+      };
+
+      queriesService.uploadedFileQueries = [testFlipQuery];
+      await queriesService.removeQueries(testFlipQuery);
       expect(saveAnyJsonInFile).toBeCalledTimes(1);
       expect(saveAnyJsonInFile).toBeCalledWith(
         fileNamesEnum.POE_QUERIES_SEARCH,
@@ -59,14 +97,43 @@ describe('QueriesService', () => {
       );
     });
   });
+  describe('addQuery', () => {
+    it('should be call mock function saveAnyJsonInFile with clear array', async () => {
+      const uuid = 'testUuid';
+      const testFlipQuery = {
+        cardQuery: 'test',
+        itemQuery: 'test',
+        uuid: uuid,
+      };
+      queriesService.uploadedFileQueries = [];
+      await queriesService.addQuery(testFlipQuery);
+      expect(saveAnyJsonInFile).toBeCalledTimes(1);
+      expect(saveAnyJsonInFile).toBeCalledWith(
+        fileNamesEnum.POE_QUERIES_SEARCH,
+        [testFlipQuery],
+      );
+      expect(queriesService.uploadedFileQueries).toEqual([testFlipQuery]);
+    });
+  });
+
   describe('onModuleInit', () => {
     it('should be call mock function saveAnyJsonInFile', async () => {
+      jest.spyOn(fs, 'existsSync').mockReturnValue(false);
       await queriesService.onModuleInit();
       expect(saveAnyJsonInFile).toBeCalledTimes(1);
       expect(saveAnyJsonInFile).toBeCalledWith(
         fileNamesEnum.POE_QUERIES_SEARCH,
         [],
       );
+      expect(queriesService.uploadedFileQueries).toEqual([]);
+    });
+    it('should be call mock function saveAnyJsonInFile', async () => {
+      jest.spyOn(fs, 'existsSync').mockReturnValue(true);
+      await queriesService.onModuleInit();
+      expect(saveAnyJsonInFile).toBeCalledTimes(0);
+      expect(loadAnyFile).toBeCalledTimes(1);
+      expect(loadAnyFile).toBeCalledWith(fileNamesEnum.POE_QUERIES_SEARCH);
+      expect(queriesService.uploadedFileQueries).toEqual([]);
     });
   });
 });

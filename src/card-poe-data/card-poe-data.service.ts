@@ -27,7 +27,7 @@ export class CardPoeDataService {
     await saveAnyJsonInFile(fileNamesEnum.POE_TRADE_DATA_ITEMS, items);
   }
 
-  async update(): Promise<void> {
+  async update(forceStop) {
     try {
       const searchQueries = await loadAnyFile(fileNamesEnum.POE_QUERIES_SEARCH);
       if (searchQueries.length === 0)
@@ -35,6 +35,8 @@ export class CardPoeDataService {
 
       const oldRowsPoeData = await loadAnyFile(fileNamesEnum.POE_DATA);
 
+
+      await delay();
       await this._takeCurrencyEquivalent();
       await searchQueries.reduce(
         async (accPromise: Promise<DataItemsType>, current) => {
@@ -65,9 +67,11 @@ export class CardPoeDataService {
               cards: [...newArray, row],
             };
             await saveAnyJsonInFile(fileNamesEnum.POE_DATA, newData);
+
             return newData;
           } catch (err) {
             Logger.error(err);
+            forceStop(0);
             return acc;
           }
         },
@@ -165,7 +169,11 @@ export class CardPoeDataService {
         result[0].item.maxStackSize * priceValues.divinePrice;
 
       const poeTradeLinkURL = new URL(
+<<<<<<< HEAD
+        'https://www.pathofexile.com/trade/search',
+=======
         'https://www.pathofexile.com/api/trade/search',
+>>>>>>> 615197d595878e9ed3a4d26be0ab2d598a630140
       );
       poeTradeLinkURL.pathname = `${poeTradeLinkURL.pathname}/${this._poeFetchService.leagueName}/${id}`;
       return {

@@ -16,6 +16,8 @@ describe('QueriesController', () => {
           useValue: {
             getQueries: jest.fn().mockResolvedValueOnce([]),
             editQueries: jest.fn(),
+            removeQueries: jest.fn(),
+            addQuery: jest.fn(),
           },
         },
       ], // Add
@@ -38,11 +40,55 @@ describe('QueriesController', () => {
 
   describe('update', () => {
     it('should be call  one time function queriesService.editQueries', async () => {
-      const testBodyValues = [{ cardQuery: 'test', itemQuery: 'test' }];
+      const testBodyValues = {
+        cardQuery: 'test',
+        itemQuery: 'test',
+        uuid: 'test',
+      };
+
       await queriesController.update(testBodyValues);
 
       expect(queriesService.editQueries).toBeCalledTimes(1);
       expect(queriesService.editQueries).toBeCalledWith(testBodyValues);
+    });
+    describe('delete', () => {
+      it('should be call  one time function queriesService.removeQueries', async () => {
+        const testBodyValues = {
+          cardQuery: 'test',
+          itemQuery: 'test',
+          uuid: 'test',
+        };
+
+        await queriesController.delete(testBodyValues);
+        expect(queriesService.removeQueries).toBeCalledTimes(1);
+        expect(queriesService.removeQueries).toBeCalledWith(testBodyValues);
+      });
+    });
+    describe('update', () => {
+      it('should be call  one time function queriesService.removeQueries', async () => {
+        const testBodyValues = {
+          cardQuery: 'test',
+          itemQuery: 'test',
+          uuid: 'test',
+        };
+
+        await queriesController.update(testBodyValues);
+        expect(queriesService.editQueries).toBeCalledTimes(1);
+        expect(queriesService.editQueries).toBeCalledWith(testBodyValues);
+      });
+    });
+    describe('add', () => {
+      it('should be call  one time function queriesService.removeQueries', async () => {
+        const testBodyValues = {
+          cardQuery: 'test',
+          itemQuery: 'test',
+          uuid: 'test',
+        };
+
+        await queriesController.add(testBodyValues);
+        expect(queriesService.addQuery).toBeCalledTimes(1);
+        expect(queriesService.addQuery).toBeCalledWith(testBodyValues);
+      });
     });
   });
 });
