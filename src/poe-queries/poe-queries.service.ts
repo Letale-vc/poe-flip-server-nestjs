@@ -4,7 +4,7 @@ import {
   fileNamesEnum,
   loadAnyFile,
   QueriesItemsFileType,
-  saveAnyJsonInFile,
+  saveAnyJsonInFile
 } from '../tools/workingWithFile';
 import { QueryFlipDto } from './dto/queries-update.dto';
 import { QueriesItems } from './interface/queries.interface';
