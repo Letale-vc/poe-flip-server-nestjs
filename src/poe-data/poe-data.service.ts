@@ -10,14 +10,11 @@ import { CardPoeDataService } from '../card-poe-data/card-poe-data.service';
 
 @Injectable()
 export class PoeDataService {
+  _forceStop: 0 | 1 = 1;
+
   constructor(private readonly _cardPoeDataService: CardPoeDataService) {}
 
-  _forceStop: 0 | 1 = 1;
-  get forceStop(): 0 | 1 {
-    return this._forceStop;
-  }
-
-  set forceStop(n: 0 | 1) {
+  forceStop(n: 0 | 1) {
     this._forceStop = n;
   }
 
@@ -34,7 +31,7 @@ export class PoeDataService {
     if (Date.now() - lastUpdate.getTime() < 30000) return Promise.resolve();
     while (this._forceStop === 1) {
       try {
-        await this._cardPoeDataService.update();
+        await this._cardPoeDataService.update(this.forceStop);
         Logger.log('Passed the cycle');
       } catch (e) {
         this._forceStop = 0;

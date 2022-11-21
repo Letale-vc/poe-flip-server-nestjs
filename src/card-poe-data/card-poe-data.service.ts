@@ -27,7 +27,7 @@ export class CardPoeDataService {
     await saveAnyJsonInFile(fileNamesEnum.POE_TRADE_DATA_ITEMS, items);
   }
 
-  async update(): Promise<void> {
+  async update(forceStop) {
     try {
       const searchQueries = await loadAnyFile(fileNamesEnum.POE_QUERIES_SEARCH);
       if (searchQueries.length === 0)
@@ -35,7 +35,9 @@ export class CardPoeDataService {
 
       const oldRowsPoeData = await loadAnyFile(fileNamesEnum.POE_DATA);
 
+      await delay();
       await this._takeCurrencyEquivalent();
+
       await searchQueries.reduce(
         async (accPromise: Promise<DataItemsType>, current) => {
           const acc = await accPromise;
@@ -65,9 +67,11 @@ export class CardPoeDataService {
               cards: [...newArray, row],
             };
             await saveAnyJsonInFile(fileNamesEnum.POE_DATA, newData);
+
             return newData;
           } catch (err) {
             Logger.error(err);
+            forceStop(0);
             return acc;
           }
         },
