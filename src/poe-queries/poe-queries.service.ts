@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import * as uuid from 'uuid';
 import {
   fileExist,
   fileNamesEnum,
   loadAnyFile,
-  QueriesItemsFileType,
-  saveAnyJsonInFile
+  saveAnyJsonInFile,
 } from '../tools/workingWithFile';
+import { AddFlipQueryDto } from './dto/add-flip-query.dto';
 import { QueryFlipDto } from './dto/queries-update.dto';
 import { QueriesItems } from './interface/queries.interface';
 
@@ -25,8 +26,8 @@ export class PoeQueriesService {
     }
   }
 
-  async getQueries(): Promise<QueriesItemsFileType> {
-    return loadAnyFile(fileNamesEnum.POE_QUERIES_SEARCH);
+  async getQueries() {
+    return this.uploadedFileQueries;
   }
 
   async editQueries(queriesUpdate: QueryFlipDto) {
@@ -39,8 +40,9 @@ export class PoeQueriesService {
     );
   }
 
-  async addQuery(queriesUpdate: QueryFlipDto) {
-    this.uploadedFileQueries = [...this.uploadedFileQueries, queriesUpdate];
+  async addQuery(flipQuery: AddFlipQueryDto) {
+    const newQuery = { ...flipQuery, uuid: uuid.v1() };
+    this.uploadedFileQueries = [...this.uploadedFileQueries, newQuery];
 
     await saveAnyJsonInFile(
       fileNamesEnum.POE_QUERIES_SEARCH,
@@ -48,9 +50,9 @@ export class PoeQueriesService {
     );
   }
 
-  async removeQueries(removeFlipQuery: QueryFlipDto) {
+  async removeQueries(flipQuery: QueryFlipDto) {
     this.uploadedFileQueries = this.uploadedFileQueries.filter(
-      (el) => el.uuid !== removeFlipQuery.uuid,
+      (el) => el.uuid !== flipQuery.uuid,
     );
     await saveAnyJsonInFile(
       fileNamesEnum.POE_QUERIES_SEARCH,

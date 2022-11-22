@@ -276,10 +276,10 @@ describe('CardPoeDataService', () => {
         if (arg === fileNamesEnum.POE_DATA) {
           return Promise.resolve({ cards: [], gems: [] });
         }
-        return Promise.resolve([]);
+        return Promise.resolve([{ cardQuery: 'test', itemQuery: 'test' }]);
       });
 
-      await service.update();
+      await service.update(jest.fn);
       expect(service._takeCurrencyEquivalent).toHaveBeenCalledTimes(1);
     });
     it('should call saveAnyJsonInFile function with test attributes, if not have row in data file', async () => {
@@ -308,7 +308,7 @@ describe('CardPoeDataService', () => {
         }
         return Promise.resolve([{ cardQuery: 'test', itemQuery: 'test' }]);
       });
-      await service.update();
+      await service.update(jest.fn());
       expect(saveAnyJsonInFile).toHaveBeenCalledTimes(1);
       expect(saveAnyJsonInFile).toHaveBeenCalledWith(fileNamesEnum.POE_DATA, {
         cards: [mockRowObject],
@@ -352,7 +352,7 @@ describe('CardPoeDataService', () => {
         }
         return Promise.resolve([{ cardQuery: 'test', itemQuery: 'test' }]);
       });
-      await service.update();
+      await service.update(jest.fn);
       expect(saveAnyJsonInFile).toHaveBeenCalledTimes(1);
       expect(saveAnyJsonInFile).toHaveBeenCalledWith(
         fileNamesEnum.POE_DATA,

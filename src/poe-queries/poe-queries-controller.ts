@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, Post, Put } from '@nestjs/common';
+import { AddFlipQueryDto } from './dto/add-flip-query.dto';
 import { QueryFlipDto } from './dto/queries-update.dto';
 import { QueriesItems } from './interface/queries.interface';
 import { PoeQueriesService } from './poe-queries.service';
@@ -18,8 +19,8 @@ export class PoeQueriesController {
   }
 
   @Post()
-  async add(@Body() queryFlipDto: QueryFlipDto) {
-    await this._queriesService.addQuery(queryFlipDto);
+  async add(@Body() addFlipQueryDto: AddFlipQueryDto) {
+    await this._queriesService.addQuery(addFlipQueryDto);
   }
 
   @Delete()
