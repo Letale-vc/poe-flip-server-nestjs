@@ -1,14 +1,14 @@
-import { IsEmpty, IsString, IsUUID } from 'class-validator';
+import { IsNotEmpty, IsString, IsUUID } from '@nestjs/class-validator';
 
 export class QueryFlipDto {
   @IsString()
-  @IsEmpty()
+  @IsNotEmpty()
   cardQuery: string;
   @IsString()
-  @IsEmpty()
+  @IsNotEmpty()
   itemQuery: string;
 
   @IsUUID()
-  @IsEmpty()
+  @IsNotEmpty()
   uuid: string;
 }
