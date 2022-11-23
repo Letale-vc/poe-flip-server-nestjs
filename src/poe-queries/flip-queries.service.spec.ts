@@ -1,11 +1,11 @@
 import { Test } from '@nestjs/testing';
-import { PoeQueriesService } from './poe-queries.service';
+import * as fs from 'fs';
 import {
   fileNamesEnum,
   loadAnyFile,
   saveAnyJsonInFile,
 } from '../tools/workingWithFile';
-import * as fs from 'fs';
+import { FlipQueriesService } from './flip-queries.service';
 
 jest.mock('../tools/workingWithFile', () => {
   const originalModule = jest.requireActual('../tools/workingWithFile');
@@ -17,8 +17,8 @@ jest.mock('../tools/workingWithFile', () => {
   };
 });
 jest.mock('fs');
-describe('QueriesService', () => {
-  let queriesService: PoeQueriesService;
+describe('FlipQueriesService', () => {
+  let queriesService: FlipQueriesService;
 
   beforeEach(async () => {
     jest.clearAllMocks();
@@ -26,10 +26,10 @@ describe('QueriesService', () => {
     const moduleRef = await Test.createTestingModule({
       imports: [], // Add
       controllers: [], // Add
-      providers: [PoeQueriesService],
+      providers: [FlipQueriesService],
     }).compile();
 
-    queriesService = moduleRef.get<PoeQueriesService>(PoeQueriesService);
+    queriesService = moduleRef.get<FlipQueriesService>(FlipQueriesService);
   });
 
   it('should be defined', () => {
