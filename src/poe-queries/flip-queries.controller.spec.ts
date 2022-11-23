@@ -1,18 +1,18 @@
 import { Test } from '@nestjs/testing';
-import { PoeQueriesController } from './poe-queries-controller';
-import { PoeQueriesService } from './poe-queries.service';
+import { FlipQueriesController } from './flip-queries-controller';
+import { FlipQueriesService } from './flip-queries.service';
 
-describe('QueriesController', () => {
-  let queriesController: PoeQueriesController;
-  let queriesService: PoeQueriesService;
+describe('FlipQueriesController', () => {
+  let queriesController: FlipQueriesController;
+  let queriesService: FlipQueriesService;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [], // Add
-      controllers: [PoeQueriesController], // Add
+      controllers: [FlipQueriesController], // Add
       providers: [
         {
-          provide: PoeQueriesService,
+          provide: FlipQueriesService,
           useValue: {
             getQueries: jest.fn().mockResolvedValueOnce([]),
             editQueries: jest.fn(),
@@ -23,9 +23,10 @@ describe('QueriesController', () => {
       ], // Add
     }).compile();
 
-    queriesController =
-      moduleRef.get<PoeQueriesController>(PoeQueriesController);
-    queriesService = moduleRef.get<PoeQueriesService>(PoeQueriesService);
+    queriesController = moduleRef.get<FlipQueriesController>(
+      FlipQueriesController,
+    );
+    queriesService = moduleRef.get<FlipQueriesService>(FlipQueriesService);
   });
 
   it('should be defined', () => {

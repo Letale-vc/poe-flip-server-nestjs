@@ -11,7 +11,7 @@ import { QueryFlipDto } from './dto/queries-update.dto';
 import { QueriesItems } from './interface/queries.interface';
 
 @Injectable()
-export class PoeQueriesService {
+export class FlipQueriesService {
   uploadedFileQueries: QueriesItems[];
 
   async onModuleInit() {
