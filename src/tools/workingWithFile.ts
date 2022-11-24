@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as fsPromises from 'fs/promises';
 import * as path from 'path';
-import { CardTypes } from '../card-poe-data/interface/card-types';
+import { CardTypes } from '../flip-cards/interface/card-types';
 import { QueriesItems } from '../flip-queries/interface/queries.interface';
 import { PoeTradeDataItemsResponse } from '../types/response-poe-fetch';
 

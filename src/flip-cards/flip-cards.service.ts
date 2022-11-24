@@ -1,20 +1,20 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { PoeFetchService } from '../poe-fetch/poe-fetch.service';
+import { delay, round } from '../tools/utils';
 import {
   DataItemsType,
   fileNamesEnum,
   loadAnyFile,
   saveAnyJsonInFile,
 } from '../tools/workingWithFile';
-import { PoeFetchService } from '../poe-fetch/poe-fetch.service';
-import { delay, round } from '../tools/utils';
-import { CardTypes, ItemInfoType } from './interface/card-types';
 import {
   PoeSecondResult,
   PoeTradeDataItemsResponse,
 } from '../types/response-poe-fetch';
+import { CardTypes, ItemInfoType } from './interface/card-types';
 
 @Injectable()
-export class CardPoeDataService {
+export class FlipCardsService {
   _poeTradeDataItemsLocalFile: PoeTradeDataItemsResponse;
   _divineChaosEquivalent = 0;
   _exaltedChaosEquivalent = 0;

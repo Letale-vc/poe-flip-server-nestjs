@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { PoeDataService } from './poe-data.service';
+import { FlipCardsModule } from '../flip-cards/flip-cards.module';
 import { PoeDataController } from './poe-data.controller';
-import { CardPoeDataModule } from '../card-poe-data/card-poe-data.module';
+import { PoeDataService } from './poe-data.service';
 
 @Module({
-  imports: [CardPoeDataModule],
+  imports: [FlipCardsModule],
   controllers: [PoeDataController],
   providers: [PoeDataService],
 })

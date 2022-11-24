@@ -1,5 +1,6 @@
 import { Test } from '@nestjs/testing';
-import { PoeDataService } from './poe-data.service';
+import * as fs from 'fs';
+import { FlipCardsService } from '../flip-cards/flip-cards.service';
 import {
   fileExist,
   fileInfo,
@@ -7,14 +8,13 @@ import {
   loadAnyFile,
   saveAnyJsonInFile,
 } from '../tools/workingWithFile';
-import { CardPoeDataService } from '../card-poe-data/card-poe-data.service';
-import * as fs from 'fs';
+import { PoeDataService } from './poe-data.service';
 
 jest.mock('../tools/workingWithFile');
 
 describe('PoeDataService', () => {
   let poeDataService: PoeDataService;
-  let cardPoeDataService: CardPoeDataService;
+  let cardPoeDataService: FlipCardsService;
   beforeEach(async () => {
     jest.resetAllMocks();
     const moduleRef = await Test.createTestingModule({
@@ -23,7 +23,7 @@ describe('PoeDataService', () => {
       providers: [
         PoeDataService,
         {
-          provide: CardPoeDataService,
+          provide: FlipCardsService,
           useValue: {
             update: jest.fn(),
           },
@@ -32,7 +32,7 @@ describe('PoeDataService', () => {
     }).compile();
 
     poeDataService = moduleRef.get<PoeDataService>(PoeDataService);
-    cardPoeDataService = moduleRef.get<CardPoeDataService>(CardPoeDataService);
+    cardPoeDataService = moduleRef.get<FlipCardsService>(FlipCardsService);
   });
 
   it('should be defined', () => {

@@ -1,4 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { FlipCardsService } from '../flip-cards/flip-cards.service';
 import {
   fileExist,
   fileInfo,
@@ -6,13 +7,12 @@ import {
   loadAnyFile,
   saveAnyJsonInFile,
 } from '../tools/workingWithFile';
-import { CardPoeDataService } from '../card-poe-data/card-poe-data.service';
 
 @Injectable()
 export class PoeDataService {
   _forceStop: 0 | 1 = 1;
 
-  constructor(private readonly _cardPoeDataService: CardPoeDataService) {}
+  constructor(private readonly _cardPoeDataService: FlipCardsService) {}
 
   forceStop(n: 0 | 1) {
     this._forceStop = n;
