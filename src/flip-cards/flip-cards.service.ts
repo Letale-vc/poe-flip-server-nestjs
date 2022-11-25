@@ -113,18 +113,11 @@ export class FlipCardsService {
 
       const profitInDivine =
         itemInfo.divinePrice - cardInfo.priceInDivineIfFullStackSize;
-
-      const profitInDivinePerCard = round(
-        profitInDivine / cardInfo.stackSize,
-        2,
+      const profitInDivinePerCard = profitInDivine / cardInfo.stackSize;
+      const profitInChaos = round(
+        itemInfo.chaosPrice - cardInfo.priceInDivineIfFullStackSize,
       );
-
-      const profitInChaos =
-        itemInfo.chaosPrice - cardInfo.priceInDivineIfFullStackSize;
-
-      const profitInChaosPerCard = Math.round(
-        profitInChaos / cardInfo.stackSize,
-      );
+      const profitInChaosPerCard = round(profitInChaos / cardInfo.stackSize);
 
       return {
         cardInfo,
@@ -279,9 +272,7 @@ export class FlipCardsService {
     // }
 
     return {
-      chaosPrice: Math.round(
-        resultValue.accValue.chaosPrice / resultValue.count,
-      ),
+      chaosPrice: round(resultValue.accValue.chaosPrice / resultValue.count),
       divinePrice: resultValue.accValue.divinePrice / resultValue.count,
     };
   }
