@@ -115,7 +115,7 @@ export class FlipCardsService {
         itemInfo.divinePrice - cardInfo.priceInDivineIfFullStackSize;
       const profitInDivinePerCard = profitInDivine / cardInfo.stackSize;
       const profitInChaos = round(
-        itemInfo.chaosPrice - cardInfo.priceInDivineIfFullStackSize,
+        itemInfo.chaosPrice - cardInfo.priceInChaosIfFullStackSize,
       );
       const profitInChaosPerCard = round(profitInChaos / cardInfo.stackSize);
 
@@ -155,10 +155,8 @@ export class FlipCardsService {
       );
       const stackSize = result[0].item.maxStackSize;
       const priceValues = this._takePriceValue(result);
-      const priceInChaosIfFullStackSize =
-        result[0].item.maxStackSize * priceValues.chaosPrice;
-      const priceInDivineIfFullStackSize =
-        result[0].item.maxStackSize * priceValues.divinePrice;
+      const priceInChaosIfFullStackSize = stackSize * priceValues.chaosPrice;
+      const priceInDivineIfFullStackSize = stackSize * priceValues.divinePrice;
 
       const poeTradeLinkURL = new URL(
         'https://www.pathofexile.com/trade/search',
