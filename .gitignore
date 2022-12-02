@@ -29,12 +29,10 @@ package-lock.json
 *.sublime-workspace
 
 # IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+.vscode
 
+
+# dev files
 data/poeData.json
 data/poeSearchUrls.json
 data/yarn.lock
