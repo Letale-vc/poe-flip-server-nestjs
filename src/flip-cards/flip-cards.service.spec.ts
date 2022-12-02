@@ -1,10 +1,10 @@
 import { Test } from '@nestjs/testing';
-import { CardPoeDataService } from './card-poe-data.service';
+import { testPoeSecondResponse } from '../../mocks/testPoeSecondResponse';
+import { PoeFetchService } from '../poe-fetch/poe-fetch.service';
 import * as filesWork from '../tools/workingWithFile';
 import { fileNamesEnum, saveAnyJsonInFile } from '../tools/workingWithFile';
-import { PoeFetchService } from '../poe-fetch/poe-fetch.service';
 import { PoeSecondResult } from '../types/response-poe-fetch';
-import { testPoeSecondResponse } from '../../mocks/testPoeSecondResponse';
+import { FlipCardsService } from './flip-cards.service';
 
 jest.mock('../tools/workingWithFile', () => {
   const originalModule = jest.requireActual('../tools/workingWithFile');
@@ -23,15 +23,15 @@ jest.mock('../tools/utils', () => {
   };
 });
 
-describe('CardPoeDataService', () => {
-  let service: CardPoeDataService;
+describe('FlipCardsService', () => {
+  let service: FlipCardsService;
   let poeFetchService: PoeFetchService;
 
   beforeEach(async () => {
     jest.resetAllMocks();
     const module = await Test.createTestingModule({
       providers: [
-        CardPoeDataService,
+        FlipCardsService,
         {
           provide: PoeFetchService,
           useValue: {
@@ -47,7 +47,7 @@ describe('CardPoeDataService', () => {
       ],
     }).compile();
 
-    service = module.get<CardPoeDataService>(CardPoeDataService);
+    service = module.get<FlipCardsService>(FlipCardsService);
     poeFetchService = module.get<PoeFetchService>(PoeFetchService);
   });
 

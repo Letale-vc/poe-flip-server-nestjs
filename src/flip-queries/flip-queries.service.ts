@@ -8,55 +8,41 @@ import {
 } from '../tools/workingWithFile';
 import { AddFlipQueryDto } from './dto/add-flip-query.dto';
 import { QueryFlipDto } from './dto/queries-update.dto';
-import { QueriesItems } from './interface/queries.interface';
 
 @Injectable()
 export class FlipQueriesService {
-  uploadedFileQueries: QueriesItems[];
-
   async onModuleInit() {
     const isHaveFile = fileExist(fileNamesEnum.POE_QUERIES_SEARCH);
     if (!isHaveFile) {
       await saveAnyJsonInFile(fileNamesEnum.POE_QUERIES_SEARCH, []);
-      this.uploadedFileQueries = [];
-    } else {
-      this.uploadedFileQueries = await loadAnyFile(
-        fileNamesEnum.POE_QUERIES_SEARCH,
-      );
     }
   }
 
   async getQueries() {
-    return this.uploadedFileQueries;
+    return await loadAnyFile(fileNamesEnum.POE_QUERIES_SEARCH);
   }
 
   async editQueries(queriesUpdate: QueryFlipDto) {
-    this.uploadedFileQueries = this.uploadedFileQueries.map((el) => {
+    const oldFlipQueries = await loadAnyFile(fileNamesEnum.POE_QUERIES_SEARCH);
+    const newFlipQueries = oldFlipQueries.map((el) => {
       return el.uuid !== queriesUpdate.uuid ? el : queriesUpdate;
     });
-    await saveAnyJsonInFile(
-      fileNamesEnum.POE_QUERIES_SEARCH,
-      this.uploadedFileQueries,
-    );
+    await saveAnyJsonInFile(fileNamesEnum.POE_QUERIES_SEARCH, newFlipQueries);
   }
 
   async addQuery(flipQuery: AddFlipQueryDto) {
+    const oldFlipQueries = await loadAnyFile(fileNamesEnum.POE_QUERIES_SEARCH);
     const newQuery = { ...flipQuery, uuid: uuid.v1() };
-    this.uploadedFileQueries = [...this.uploadedFileQueries, newQuery];
+    const newFlipQueries = [...oldFlipQueries, newQuery];
 
-    await saveAnyJsonInFile(
-      fileNamesEnum.POE_QUERIES_SEARCH,
-      this.uploadedFileQueries,
-    );
+    await saveAnyJsonInFile(fileNamesEnum.POE_QUERIES_SEARCH, newFlipQueries);
   }
 
   async removeQueries(flipQuery: QueryFlipDto) {
-    this.uploadedFileQueries = this.uploadedFileQueries.filter(
+    const oldFlipQueries = await loadAnyFile(fileNamesEnum.POE_QUERIES_SEARCH);
+    const newFlipQueries = oldFlipQueries.filter(
       (el) => el.uuid !== flipQuery.uuid,
     );
-    await saveAnyJsonInFile(
-      fileNamesEnum.POE_QUERIES_SEARCH,
-      this.uploadedFileQueries,
-    );
+    await saveAnyJsonInFile(fileNamesEnum.POE_QUERIES_SEARCH, newFlipQueries);
   }
 }

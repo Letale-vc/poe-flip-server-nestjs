@@ -1,20 +1,20 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { PoeFetchService } from '../poe-fetch/poe-fetch.service';
+import { delay, round } from '../tools/utils';
 import {
   DataItemsType,
   fileNamesEnum,
   loadAnyFile,
   saveAnyJsonInFile,
 } from '../tools/workingWithFile';
-import { PoeFetchService } from '../poe-fetch/poe-fetch.service';
-import { delay, round } from '../tools/utils';
-import { CardTypes, ItemInfoType } from './interface/card-types';
 import {
   PoeSecondResult,
   PoeTradeDataItemsResponse,
 } from '../types/response-poe-fetch';
+import { CardTypes, ItemInfoType } from './interface/card-types';
 
 @Injectable()
-export class CardPoeDataService {
+export class FlipCardsService {
   _poeTradeDataItemsLocalFile: PoeTradeDataItemsResponse;
   _divineChaosEquivalent = 0;
   _exaltedChaosEquivalent = 0;
@@ -113,18 +113,11 @@ export class CardPoeDataService {
 
       const profitInDivine =
         itemInfo.divinePrice - cardInfo.priceInDivineIfFullStackSize;
-
-      const profitInDivinePerCard = round(
-        profitInDivine / cardInfo.stackSize,
-        2,
+      const profitInDivinePerCard = profitInDivine / cardInfo.stackSize;
+      const profitInChaos = round(
+        itemInfo.chaosPrice - cardInfo.priceInDivineIfFullStackSize,
       );
-
-      const profitInChaos =
-        itemInfo.chaosPrice - cardInfo.priceInDivineIfFullStackSize;
-
-      const profitInChaosPerCard = Math.round(
-        profitInChaos / cardInfo.stackSize,
-      );
+      const profitInChaosPerCard = round(profitInChaos / cardInfo.stackSize);
 
       return {
         cardInfo,
@@ -279,9 +272,7 @@ export class CardPoeDataService {
     // }
 
     return {
-      chaosPrice: Math.round(
-        resultValue.accValue.chaosPrice / resultValue.count,
-      ),
+      chaosPrice: round(resultValue.accValue.chaosPrice / resultValue.count),
       divinePrice: resultValue.accValue.divinePrice / resultValue.count,
     };
   }

@@ -1,15 +1,10 @@
 import { Module } from '@nestjs/common';
-import { CardPoeDataModule } from './card-poe-data/card-poe-data.module';
+import { FlipCardsModule } from './flip-cards/flip-cards.module';
+import { FlipQueriesModule } from './flip-queries/flip-queries-module';
 import { PoeDataModule } from './poe-data/poe-data.module';
 import { PoeFetchModule } from './poe-fetch/poe-fetch.module';
-import { FlipQueriesModule } from './poe-queries/flip-queries-module';
 
 @Module({
-  imports: [
-    PoeDataModule,
-    FlipQueriesModule,
-    CardPoeDataModule,
-    PoeFetchModule,
-  ],
+  imports: [PoeDataModule, FlipQueriesModule, FlipCardsModule, PoeFetchModule],
 })
 export class AppModule {}

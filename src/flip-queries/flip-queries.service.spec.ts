@@ -1,5 +1,6 @@
 import { Test } from '@nestjs/testing';
 import * as fs from 'fs';
+import * as uuid from 'uuid';
 import {
   fileNamesEnum,
   loadAnyFile,
@@ -7,6 +8,7 @@ import {
 } from '../tools/workingWithFile';
 import { FlipQueriesService } from './flip-queries.service';
 
+jest.mock('uuid');
 jest.mock('../tools/workingWithFile', () => {
   const originalModule = jest.requireActual('../tools/workingWithFile');
   return {
@@ -22,7 +24,7 @@ describe('FlipQueriesService', () => {
 
   beforeEach(async () => {
     jest.clearAllMocks();
-    (loadAnyFile as jest.Mock).mockResolvedValue([]);
+
     const moduleRef = await Test.createTestingModule({
       imports: [], // Add
       controllers: [], // Add
@@ -38,6 +40,7 @@ describe('FlipQueriesService', () => {
   describe('getQueries', () => {
     it('should be return test and toBeCallWith fileNamesEnum.POE_QUERIES_SEARCH', async () => {
       // check what the mock function returns loadAnyFile
+      (loadAnyFile as jest.Mock).mockResolvedValue([]);
       expect(await queriesService.getQueries()).toStrictEqual([]);
       expect(loadAnyFile).toBeCalledWith(fileNamesEnum.POE_QUERIES_SEARCH);
     });
@@ -45,12 +48,12 @@ describe('FlipQueriesService', () => {
 
   describe('editQueries', () => {
     it('should be call mock function saveAnyJsonInFile', async () => {
-      const uuid = 'testUuid';
+      const testUuid = 'testUuid';
       const testUploadedFileQueries = [
         {
           cardQuery: 'test',
           itemQuery: 'test',
-          uuid: uuid,
+          uuid: testUuid,
         },
         {
           cardQuery: 'test',
@@ -61,34 +64,29 @@ describe('FlipQueriesService', () => {
       const newTestFlipQuery = {
         cardQuery: 'test2',
         itemQuery: 'test2',
-        uuid: uuid,
+        uuid: testUuid,
       };
-      queriesService.uploadedFileQueries = testUploadedFileQueries;
+      (loadAnyFile as jest.Mock).mockResolvedValue(testUploadedFileQueries);
       await queriesService.editQueries(newTestFlipQuery);
 
-      expect(queriesService.uploadedFileQueries).toEqual(
-        queriesService.uploadedFileQueries.map((el) => {
-          if (el.uuid === uuid) return newTestFlipQuery;
-          return el;
-        }),
-      );
       expect(saveAnyJsonInFile).toBeCalledTimes(1);
       expect(saveAnyJsonInFile).toBeCalledWith(
         fileNamesEnum.POE_QUERIES_SEARCH,
-        queriesService.uploadedFileQueries,
+        testUploadedFileQueries.map((el) =>
+          el.uuid === testUuid ? newTestFlipQuery : el,
+        ),
       );
     });
   });
   describe('removeQueries', () => {
     it('should be call mock function saveAnyJsonInFile with clear array', async () => {
-      const uuid = 'testUuid';
+      const testUuid = 'testUuid';
       const testFlipQuery = {
         cardQuery: 'test',
         itemQuery: 'test',
-        uuid: uuid,
+        uuid: testUuid,
       };
-
-      queriesService.uploadedFileQueries = [testFlipQuery];
+      (loadAnyFile as jest.Mock).mockResolvedValue([testFlipQuery]);
       await queriesService.removeQueries(testFlipQuery);
       expect(saveAnyJsonInFile).toBeCalledTimes(1);
       expect(saveAnyJsonInFile).toBeCalledWith(
@@ -99,20 +97,28 @@ describe('FlipQueriesService', () => {
   });
   describe('addQuery', () => {
     it('should be call mock function saveAnyJsonInFile with clear array', async () => {
-      const uuid = 'testUuid';
+      const testOldFlipQueries = [
+        {
+          cardQuery: 'testOldString',
+          itemQuery: 'testOldString',
+          uuid: 'uuid',
+        },
+      ];
+      (loadAnyFile as jest.Mock).mockResolvedValue(testOldFlipQueries);
+      const testUuid = 'testUuid';
       const testFlipQuery = {
         cardQuery: 'test',
         itemQuery: 'test',
-        uuid: uuid,
       };
-      queriesService.uploadedFileQueries = [];
+      jest.spyOn(uuid, 'v1').mockReturnValue(testUuid);
+
       await queriesService.addQuery(testFlipQuery);
       expect(saveAnyJsonInFile).toBeCalledTimes(1);
-      expect(saveAnyJsonInFile).toBeCalledWith(
+
+      expect(saveAnyJsonInFile).toHaveBeenCalledWith(
         fileNamesEnum.POE_QUERIES_SEARCH,
-        [testFlipQuery],
+        [...testOldFlipQueries, { ...testFlipQuery, uuid: testUuid }],
       );
-      expect(queriesService.uploadedFileQueries).toEqual([testFlipQuery]);
     });
   });
 
@@ -125,15 +131,11 @@ describe('FlipQueriesService', () => {
         fileNamesEnum.POE_QUERIES_SEARCH,
         [],
       );
-      expect(queriesService.uploadedFileQueries).toEqual([]);
     });
     it('should be call mock function saveAnyJsonInFile', async () => {
       jest.spyOn(fs, 'existsSync').mockReturnValue(true);
       await queriesService.onModuleInit();
       expect(saveAnyJsonInFile).toBeCalledTimes(0);
-      expect(loadAnyFile).toBeCalledTimes(1);
-      expect(loadAnyFile).toBeCalledWith(fileNamesEnum.POE_QUERIES_SEARCH);
-      expect(queriesService.uploadedFileQueries).toEqual([]);
     });
   });
 });
