@@ -1,5 +1,6 @@
 {
 	"name": "poe-flip-server-nestjs",
+	"version": "0.0.1",
 	"description": "",
 	"author": "",
 	"private": false,
