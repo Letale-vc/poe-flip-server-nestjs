@@ -14,7 +14,7 @@ export enum fileNamesEnum {
 
 const pathFolder = path.resolve('data');
 const createPathFolderFile = (nameFile: fileNamesEnum) =>
-  path.join(pathFolder, nameFile);
+  path.resolve(pathFolder, nameFile);
 
 export type CurrencyQueriesType = { divine: string; exalted: string };
 export type QueriesItemsFileType = Array<QueriesItems>;
