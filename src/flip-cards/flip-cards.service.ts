@@ -18,6 +18,7 @@ export class FlipCardsService {
   _poeTradeDataItemsLocalFile: PoeTradeDataItemsResponse;
   _divineChaosEquivalent = 0;
   _exaltedChaosEquivalent = 0;
+  private readonly logger = new Logger(FlipCardsService.name);
 
   constructor(private readonly _poeFetchService: PoeFetchService) {}
 
@@ -69,7 +70,7 @@ export class FlipCardsService {
 
             return newData;
           } catch (err) {
-            Logger.error(err);
+            this.logger.error(err);
             forceStop(0);
             return acc;
           }
@@ -83,10 +84,12 @@ export class FlipCardsService {
   }
 
   async _takeCurrencyEquivalent(): Promise<void> {
+    this.logger.log('Take currency price');
     const currencyQuery = await loadAnyFile(fileNamesEnum.CURRENCY_QUERIES);
     const divine = await this._poeFetchService.makeARequestToAnyItem(
       currencyQuery.divine,
     );
+    delay(10000);
     this._divineChaosEquivalent =
       divine.result.reduce((acc, value) => {
         return value.listing.price.amount + acc;
@@ -108,7 +111,10 @@ export class FlipCardsService {
     itemQuery: string;
   }): Promise<CardTypes> {
     try {
+      this.logger.log('First request In Row');
       const cardInfo = await this._takeItemInfo(cardQuery);
+      delay(15000);
+      this.logger.log('Second request In Row');
       const itemInfo = await this._takeItemInfo(itemQuery);
 
       const profitInDivine =

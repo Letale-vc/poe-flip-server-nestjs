@@ -11,6 +11,7 @@ import {
 @Injectable()
 export class PoeDataService {
   _forceStop: 0 | 1 = 1;
+  private logger = new Logger(PoeDataService.name);
 
   constructor(private readonly _cardPoeDataService: FlipCardsService) {}
 
@@ -32,7 +33,7 @@ export class PoeDataService {
     while (this._forceStop === 1) {
       try {
         await this._cardPoeDataService.update(this.forceStop);
-        Logger.log('Passed the cycle');
+        this.logger.log('Passed the cycle');
       } catch (e) {
         this._forceStop = 0;
       }
