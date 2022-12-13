@@ -91,7 +91,6 @@ export class FlipCardsService {
       divine.result.reduce((acc, value) => {
         return value.listing.price.amount + acc;
       }, 0) / divine.result.length;
-    await delay(15);
     const exalted = await this._poeFetchService.makeARequestToAnyItem(
       currencyQuery.exalted,
     );
@@ -110,7 +109,6 @@ export class FlipCardsService {
   }): Promise<CardTypes> {
     try {
       const cardInfo = await this._takeItemInfo(cardQuery);
-      await delay(15);
       const itemInfo = await this._takeItemInfo(itemQuery);
 
       const profitInDivine =
