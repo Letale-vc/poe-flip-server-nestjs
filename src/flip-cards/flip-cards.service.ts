@@ -188,41 +188,40 @@ export class FlipCardsService {
     divinePrice: number;
     chaosPrice: number;
   } {
-    // const differenceChaos = 15;
-    // const differenceDivine = 1;
+    const differenceChaos = 15;
+    const differenceDivine = 5;
     // const differenceExalted = 2;
     const resultValue = itemsArray.reduce(
       (
         previousValue,
         currentValue,
+        index,
       ): {
         accValue: { chaosPrice: number; divinePrice: number };
         lastPrice: number;
         count: number;
       } => {
-        // const l = previousValue.lastPrice;
+        const l = previousValue.count;
         const a = previousValue.accValue;
+        const timeInTrade = new Date(currentValue.listing.indexed);
+        const dateTimeNow = new Date();
+        const timeListed = dateTimeNow.getTime() - timeInTrade.getTime();
+        const timeListedChecked = timeListed > 1.44e7;
         const b = currentValue.listing.price.amount;
         // TODO: need uncomment  if need
         // if (previousValue.count >= 4) {
         //   return previousValue;
         // }
-        // if (l !== 0 && (l / b) * 100 < 80) {
-        //   return {
-        //     accValue: { chaosPrice: 0, divinePrice: 0 },
-        //     lastPrice: 0,
-        //     count: 0,
-        //   };
-        // }
+        if (l < 3 && timeListedChecked) return previousValue;
         switch (currentValue.listing.price.currency) {
           case 'chaos': {
-            // if (
-            //   l !== 0 &&
-            //   b - previousValue.accValue.chaosPrice / previousValue.count >
-            //     differenceChaos
-            // ) {
-            //   return previousValue;
-            // }
+            const actualPrice = a.chaosPrice / previousValue.count;
+            const differenceInPercent = (actualPrice / b) * 100;
+            const doesItExistBigDifferencePrice =
+              differenceInPercent > differenceChaos;
+            if (timeListedChecked && l !== 0 && doesItExistBigDifferencePrice)
+              return previousValue;
+
             const convertChaosInDivine = b / this._divineChaosEquivalent;
             return {
               accValue: {
@@ -234,9 +233,13 @@ export class FlipCardsService {
             };
           }
           case 'divine': {
-            // if (l !== 0 && b - l > differenceDivine) {
-            //   return previousValue;
-            // }
+            const actualPrice = a.divinePrice / previousValue.count;
+            const differenceInPercent = (actualPrice / b) * 100;
+            const doesItExistBigDifferencePrice =
+              differenceInPercent > differenceDivine;
+            if (timeListedChecked && l !== 0 && doesItExistBigDifferencePrice)
+              return previousValue;
+
             const convertDivineInChaos = b * this._divineChaosEquivalent;
             return {
               accValue: {
@@ -248,12 +251,19 @@ export class FlipCardsService {
             };
           }
           case 'exalted': {
-            // if (l !== 0 && b - l > differenceExalted) {
-            //   return previousValue;
-            // }
             const convertExaltedInChaos = b * this._exaltedChaosEquivalent;
             const convertExaltedInDivine =
               convertExaltedInChaos / this._divineChaosEquivalent;
+
+            const actualPrice = a.divinePrice / previousValue.count;
+            const differenceInPercent =
+              (actualPrice / convertExaltedInChaos) * 100;
+            const doesItExistBigDifferencePrice =
+              differenceInPercent > differenceChaos;
+
+            if (timeListedChecked && l !== 0 && doesItExistBigDifferencePrice)
+              return previousValue;
+
             return {
               accValue: {
                 chaosPrice: a.chaosPrice + convertExaltedInChaos,
