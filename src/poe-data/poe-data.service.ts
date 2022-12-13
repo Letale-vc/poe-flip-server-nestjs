@@ -46,7 +46,7 @@ export class PoeDataService {
     const poeData = await loadAnyFile(fileNamesEnum.POE_DATA);
     const fileDataInfo = await fileInfo(fileNamesEnum.POE_DATA);
     const lastUpdate = fileDataInfo.mtime;
-    const canUpdate = !!this.updateNow;
+    const canUpdate = !this.updateNow;
 
     return { poeData, lastUpdate, canUpdate };
   }
