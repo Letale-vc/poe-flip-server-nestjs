@@ -12,6 +12,8 @@ import {
 export class PoeDataService {
   _forceStop: 0 | 1 = 1;
 
+  private updateNow = false;
+
   constructor(private readonly _cardPoeDataService: FlipCardsService) {}
 
   forceStop(n: 0 | 1) {
@@ -26,14 +28,14 @@ export class PoeDataService {
   }
 
   async startUpdate() {
-    const fileDataInfo = await fileInfo(fileNamesEnum.POE_DATA);
-    const lastUpdate = fileDataInfo.mtime;
-    if (Date.now() - lastUpdate.getTime() < 30000) return Promise.resolve();
+    if (this.updateNow) return Promise.resolve();
     while (this._forceStop === 1) {
       try {
+        this.updateNow = true;
         await this._cardPoeDataService.update(this.forceStop);
         Logger.log('Passed the cycle');
       } catch (e) {
+        this.updateNow = false;
         this._forceStop = 0;
       }
     }
@@ -43,7 +45,7 @@ export class PoeDataService {
     const poeData = await loadAnyFile(fileNamesEnum.POE_DATA);
     const fileDataInfo = await fileInfo(fileNamesEnum.POE_DATA);
     const lastUpdate = fileDataInfo.mtime;
-    const canUpdate = Date.now() - lastUpdate.getTime() > 30000;
+    const canUpdate = !!this.updateNow;
 
     return { poeData, lastUpdate, canUpdate };
   }
