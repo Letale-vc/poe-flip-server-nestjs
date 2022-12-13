@@ -36,12 +36,12 @@ export class FlipCardsService {
 
       const oldRowsPoeData = await loadAnyFile(fileNamesEnum.POE_DATA);
 
-      await delay();
+      await delay(20000);
       await this._takeCurrencyEquivalent();
       await searchQueries.reduce(
         async (accPromise: Promise<DataItemsType>, current) => {
           const acc = await accPromise;
-          await delay();
+          await delay(20000);
           try {
             const row = await this._takeRow({
               ...current,
@@ -89,7 +89,7 @@ export class FlipCardsService {
     const divine = await this._poeFetchService.makeARequestToAnyItem(
       currencyQuery.divine,
     );
-    delay(10000);
+
     this._divineChaosEquivalent =
       divine.result.reduce((acc, value) => {
         return value.listing.price.amount + acc;
@@ -97,6 +97,7 @@ export class FlipCardsService {
     const exalted = await this._poeFetchService.makeARequestToAnyItem(
       currencyQuery.exalted,
     );
+    delay(20000);
     this._exaltedChaosEquivalent =
       exalted.result.reduce((acc, value) => {
         return value.listing.price.amount + acc;
@@ -113,7 +114,7 @@ export class FlipCardsService {
     try {
       this.logger.log('First request In Row');
       const cardInfo = await this._takeItemInfo(cardQuery);
-      delay(15000);
+      delay(20000);
       this.logger.log('Second request In Row');
       const itemInfo = await this._takeItemInfo(itemQuery);
 
