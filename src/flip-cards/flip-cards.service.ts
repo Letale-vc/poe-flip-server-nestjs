@@ -273,7 +273,9 @@ export class FlipCardsService {
 
     return {
       chaosPrice: round(resultValue.accValue.chaosPrice / resultValue.count),
-      divinePrice: resultValue.accValue.divinePrice / resultValue.count,
+      divinePrice: Math.round(
+        resultValue.accValue.divinePrice / resultValue.count,
+      ),
     };
   }
 }
