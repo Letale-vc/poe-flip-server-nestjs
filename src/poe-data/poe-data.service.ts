@@ -15,10 +15,13 @@ export class PoeDataService {
 
   private updateNow = false;
 
-  constructor(private readonly _cardPoeDataService: FlipCardsService) {}
-
   forceStop(n: 0 | 1) {
     this._forceStop = n;
+    this.updateNow = true;
+  }
+
+  constructor(private readonly _cardPoeDataService: FlipCardsService) {
+    this.forceStop = this.forceStop.bind(this);
   }
 
   async onModuleInit() {
