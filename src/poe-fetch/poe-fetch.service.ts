@@ -26,11 +26,10 @@ export class PoeFetchService {
 
   async _takeLeagueName(): Promise<string> {
     try {
-      const observableResponse =
-        await this._httpService.get<ResponseLeagueList>(
-          'https://www.pathofexile.com/api/trade/data/leagues',
-          this.httpOptions(),
-        );
+      const observableResponse = this._httpService.get<ResponseLeagueList>(
+        'https://www.pathofexile.com/api/trade/data/leagues',
+        this.httpOptions(),
+      );
       return (await lastValueFrom(observableResponse)).data.result.find(
         (el) =>
           !el.id.toLowerCase().includes('standard') &&
@@ -44,7 +43,7 @@ export class PoeFetchService {
 
   async poeTradeDataItems(): Promise<PoeTradeDataItemsResponse> {
     try {
-      const observableResponse = await this._httpService
+      const observableResponse = this._httpService
         .get<PoeTradeDataItemsResponse>(
           'https://www.pathofexile.com/api/trade/data/items',
           this.httpOptions(),
