@@ -17,7 +17,7 @@ export class PoeDataService {
 
   forceStop(n: 0 | 1) {
     this._forceStop = n;
-    this.updateNow = true;
+    this.updateNow = false;
   }
 
   constructor(private readonly _cardPoeDataService: FlipCardsService) {
